@@ -128,7 +128,7 @@ func TestDictIPLD(t *testing.T) {
 
 }
 
-func TestCBOREncode(t *testing.T) {
+func TestCBORMarshalCBOR(t *testing.T) {
 	n := Dict{
 		Tag: "foo",
 		Pairs: Pairs{

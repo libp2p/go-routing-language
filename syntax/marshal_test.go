@@ -26,12 +26,12 @@ func TestMarshale2e(t *testing.T) {
 	}
 
 	// Encode
-	b, err := Marshal(n)
+	b, err := MarshalJSON(n)
 	if err != nil {
 		t.Fatal(err)
 	}
 	// Decode
-	out, err := Unmarshal(b)
+	out, err := UnmarshalJSON(b)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -53,11 +53,11 @@ func TestMarshale2e(t *testing.T) {
 
 func TestMarshalString(t *testing.T) {
 	n := String{"testing!"}
-	b, err := Marshal(n)
+	b, err := MarshalJSON(n)
 	if err != nil {
 		t.Fatal(err)
 	}
-	o, err := Unmarshal(b)
+	o, err := UnmarshalJSON(b)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -69,11 +69,11 @@ func TestMarshalString(t *testing.T) {
 
 func TestMarshalBool(t *testing.T) {
 	n := Bool{true}
-	b, err := Marshal(n)
+	b, err := MarshalJSON(n)
 	if err != nil {
 		t.Fatal(err)
 	}
-	o, err := Unmarshal(b)
+	o, err := UnmarshalJSON(b)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -82,11 +82,11 @@ func TestMarshalBool(t *testing.T) {
 	}
 
 	n = Bool{false}
-	b, err = Marshal(n)
+	b, err = MarshalJSON(n)
 	if err != nil {
 		t.Fatal(err)
 	}
-	o, err = Unmarshal(b)
+	o, err = UnmarshalJSON(b)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -97,11 +97,11 @@ func TestMarshalBool(t *testing.T) {
 
 func TestMarshalBlob(t *testing.T) {
 	n := Blob{[]byte("testing!")}
-	b, err := Marshal(n)
+	b, err := MarshalJSON(n)
 	if err != nil {
 		t.Fatal(err)
 	}
-	o, err := Unmarshal(b)
+	o, err := UnmarshalJSON(b)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -112,11 +112,11 @@ func TestMarshalBlob(t *testing.T) {
 
 func TestMarshalNumber(t *testing.T) {
 	n := Int{big.NewInt(123)}
-	b, err := Marshal(n)
+	b, err := MarshalJSON(n)
 	if err != nil {
 		t.Fatal(err)
 	}
-	o, err := Unmarshal(b)
+	o, err := UnmarshalJSON(b)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -128,11 +128,11 @@ func TestMarshalNumber(t *testing.T) {
 	// UnmarshalText generates a 64 precision float.
 	// Check: https://github.com/golang/go/issues/45309
 	f := Float{big.NewFloat(123.123).SetPrec(64)}
-	b, err = Marshal(f)
+	b, err = MarshalJSON(f)
 	if err != nil {
 		t.Fatal(err)
 	}
-	of, err := Unmarshal(b)
+	of, err := UnmarshalJSON(b)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -149,11 +149,11 @@ func TestMarshalDict(t *testing.T) {
 			{Bool{true}, Int{big.NewInt(567)}},
 		},
 	}
-	b, err := Marshal(n)
+	b, err := MarshalJSON(n)
 	if err != nil {
 		t.Fatal(err)
 	}
-	out, err := Unmarshal(b)
+	out, err := UnmarshalJSON(b)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -173,11 +173,11 @@ func TestMarshalSet(t *testing.T) {
 		Elements: []Node{n1, n2, n3},
 	}
 
-	b, err := Marshal(n)
+	b, err := MarshalJSON(n)
 	if err != nil {
 		t.Fatal(err)
 	}
-	out, err := Unmarshal(b)
+	out, err := UnmarshalJSON(b)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -204,11 +204,11 @@ func TestIPLDE2ESerialize(t *testing.T) {
 			}},
 		},
 	}
-	b, err := Encode(n)
+	b, err := MarshalCBOR(n)
 	if err != nil {
 		t.Fatal(err)
 	}
-	out, err := Decode(b)
+	out, err := UnmarshalCBOR(b)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -8,8 +8,8 @@ import (
 	xipld "github.com/libp2p/go-routing-language/syntax/ipld"
 )
 
-// Marshal syntactic representation
-func Marshal(n Node) ([]byte, error) {
+// MarshalJSON syntactic representation
+func MarshalJSON(n Node) ([]byte, error) {
 	in, err := n.toNode_IPLD()
 	if err != nil {
 		return nil, err
@@ -22,8 +22,8 @@ func Marshal(n Node) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-// Unmarshal syntactic representation
-func Unmarshal(r []byte) (Node, error) {
+// UnmarshalJSON syntactic representation
+func UnmarshalJSON(r []byte) (Node, error) {
 	n := xipld.Type.Node_IPLD.NewBuilder()
 	err := json.Decode(n, bytes.NewReader(r))
 	if err != nil {
@@ -32,8 +32,8 @@ func Unmarshal(r []byte) (Node, error) {
 	return FromIPLD(n.Build())
 }
 
-// Encode Serializes syntactic nodes in CBOR using its IPLD capabilities
-func Encode(n Node) ([]byte, error) {
+// MarshalCBOR serializes syntactic nodes in CBOR using its IPLD capabilities
+func MarshalCBOR(n Node) ([]byte, error) {
 	in, err := n.toNode_IPLD()
 	if err != nil {
 		return nil, err
@@ -46,8 +46,8 @@ func Encode(n Node) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-// Decode de-serializes syntactic nodes in CBOR using its IPLD capabilities
-func Decode(r []byte) (Node, error) {
+// UnmarshalCBOR deserializes syntactic nodes from CBOR using its IPLD capabilities
+func UnmarshalCBOR(r []byte) (Node, error) {
 	n := xipld.Type.Node_IPLD.NewBuilder()
 	err := cbor.Decode(n, bytes.NewReader(r))
 	if err != nil {
