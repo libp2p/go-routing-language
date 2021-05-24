@@ -29,6 +29,8 @@ type typeSlab struct {
 	Float_IPLD__Repr _Float_IPLD__ReprPrototype
 	Int_IPLD       _Int_IPLD__Prototype
 	Int_IPLD__Repr _Int_IPLD__ReprPrototype
+	List_IPLD       _List_IPLD__Prototype
+	List_IPLD__Repr _List_IPLD__ReprPrototype
 	Node_IPLD       _Node_IPLD__Prototype
 	Node_IPLD__Repr _Node_IPLD__ReprPrototype
 	Nodes_IPLD       _Nodes_IPLD__Prototype
@@ -37,8 +39,6 @@ type typeSlab struct {
 	Pair_IPLD__Repr _Pair_IPLD__ReprPrototype
 	Pairs_IPLD       _Pairs_IPLD__Prototype
 	Pairs_IPLD__Repr _Pairs_IPLD__ReprPrototype
-	Set_IPLD       _Set_IPLD__Prototype
-	Set_IPLD__Repr _Set_IPLD__ReprPrototype
 	String       _String__Prototype
 	String__Repr _String__ReprPrototype
 	String_IPLD       _String_IPLD__Prototype
@@ -70,6 +70,13 @@ type _Float_IPLD struct{ x float64 }
 type Int_IPLD = *_Int_IPLD
 type _Int_IPLD struct{ x int64 }
 
+// List_IPLD matches the IPLD Schema type "List_IPLD".  It has Struct type-kind, and may be interrogated like map kind.
+type List_IPLD = *_List_IPLD
+type _List_IPLD struct {
+	Tag _String
+	Elements _Nodes_IPLD
+}
+
 // Node_IPLD matches the IPLD Schema type "Node_IPLD".
 // Node_IPLD has Union typekind, which means its data model behaviors are that of a map kind.
 type Node_IPLD = *_Node_IPLD
@@ -85,7 +92,7 @@ func (_Int_IPLD) _Node_IPLD__member() {}
 func (_Float_IPLD) _Node_IPLD__member() {}
 func (_Bool_IPLD) _Node_IPLD__member() {}
 func (_Dict_IPLD) _Node_IPLD__member() {}
-func (_Set_IPLD) _Node_IPLD__member() {}
+func (_List_IPLD) _Node_IPLD__member() {}
 
 // Nodes_IPLD matches the IPLD Schema type "Nodes_IPLD".  It has list kind.
 type Nodes_IPLD = *_Nodes_IPLD
@@ -104,13 +111,6 @@ type _Pair_IPLD struct {
 type Pairs_IPLD = *_Pairs_IPLD
 type _Pairs_IPLD struct {
 	x []_Pair_IPLD
-}
-
-// Set_IPLD matches the IPLD Schema type "Set_IPLD".  It has Struct type-kind, and may be interrogated like map kind.
-type Set_IPLD = *_Set_IPLD
-type _Set_IPLD struct {
-	Tag _String
-	Elements _Nodes_IPLD
 }
 
 // String matches the IPLD Schema type "String".  It has string kind.

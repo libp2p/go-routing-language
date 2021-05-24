@@ -163,12 +163,12 @@ func TestMarshalDict(t *testing.T) {
 
 }
 
-func TestMarshalSet(t *testing.T) {
+func TestMarshalList(t *testing.T) {
 	n1 := Bool{true}
 	n2 := String{"testing!"}
 	n3 := Int{big.NewInt(567)}
 
-	n := Set{
+	n := List{
 		Tag:      "foo2",
 		Elements: []Node{n1, n2, n3},
 	}
@@ -182,7 +182,7 @@ func TestMarshalSet(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !IsEqual(n, out) {
-		t.Fatal("Error unmarshalling Set")
+		t.Fatal("Error unmarshalling List")
 	}
 
 }

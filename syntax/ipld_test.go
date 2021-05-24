@@ -84,13 +84,13 @@ func TestFloatIPLD(t *testing.T) {
 	}
 }
 
-func TestSetIPLD(t *testing.T) {
+func TestListIPLD(t *testing.T) {
 	n1 := Bool{true}
 	n2 := String{"testing!"}
 	n3 := Bytes{[]byte("test")}
 	n4 := Int{big.NewInt(567)}
 
-	b := Set{
+	b := List{
 		Tag:      "foo2",
 		Elements: []Node{n1, n2, n3, n4},
 	}
@@ -103,7 +103,7 @@ func TestSetIPLD(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !IsEqual(b, bo) {
-		t.Fatal("e2e IPLD Set transformation failed", b, bo)
+		t.Fatal("e2e IPLD List transformation failed", b, bo)
 	}
 }
 
@@ -123,7 +123,7 @@ func TestDictIPLD(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !IsEqual(b, bo) {
-		t.Fatal("e2e Dict Set transformation failed", b, bo)
+		t.Fatal("e2e Dict List transformation failed", b, bo)
 	}
 
 }

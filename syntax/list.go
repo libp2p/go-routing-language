@@ -8,26 +8,26 @@ import (
 	xipld "github.com/libp2p/go-routing-language/syntax/ipld"
 )
 
-// Set is a set of (uniquely) elements.
-type Set struct {
+// List is a set of (uniquely) elements.
+type List struct {
 	Tag      string
 	Elements Nodes
 }
 
-func (s Set) Copy() Set {
+func (s List) Copy() List {
 	e := make(Nodes, len(s.Elements))
 	copy(e, s.Elements)
-	return Set{
+	return List{
 		Tag:      s.Tag,
 		Elements: e,
 	}
 }
 
-func (s Set) Len() int {
+func (s List) Len() int {
 	return len(s.Elements)
 }
 
-func (s Set) WritePretty(w io.Writer) error {
+func (s List) WritePretty(w io.Writer) error {
 	if _, err := w.Write([]byte(s.Tag)); err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func (s Set) WritePretty(w io.Writer) error {
 	return nil
 }
 
-func IsEqualSet(x, y Set) bool {
+func IsEqualList(x, y List) bool {
 	if x.Tag != y.Tag {
 		return false
 	}
@@ -66,10 +66,10 @@ func IsEqualSet(x, y Set) bool {
 }
 
 // ToIPLD converts xr.Node into its corresponding IPLD Node type
-func (s Set) ToIPLD() (ipld.Node, error) {
+func (s List) ToIPLD() (ipld.Node, error) {
 	// NOTE: Consider adding multierr throughout this whole function
 	// Initialize Dict
-	sbuild := xipld.Type.Set_IPLD.NewBuilder()
+	sbuild := xipld.Type.List_IPLD.NewBuilder()
 	ma, err := sbuild.BeginMap(-1)
 	if err != nil {
 		return nil, err
@@ -125,10 +125,10 @@ func (s Set) ToIPLD() (ipld.Node, error) {
 }
 
 // toNode_IPLD convert into IPLD Node of dynamic type NODE_IPLD
-func (s Set) toNode_IPLD() (ipld.Node, error) {
+func (s List) toNode_IPLD() (ipld.Node, error) {
 	t := xipld.Type.Node_IPLD.NewBuilder()
 	ma, err := t.BeginMap(-1)
-	asm, err := ma.AssembleEntry("Set_IPLD")
+	asm, err := ma.AssembleEntry("List_IPLD")
 	if err != nil {
 		return nil, err
 	}

@@ -39,7 +39,7 @@ func main() {
 			"Float_IPLD",
 			"Bool_IPLD",
 			"Dict_IPLD",
-			"Set_IPLD",
+			"List_IPLD",
 		},
 
 		// Keys for the JSON representation of types
@@ -50,7 +50,7 @@ func main() {
 			"Float":  "Float_IPLD",
 			"Bool":   "Bool_IPLD",
 			"Dict":   "Dict_IPLD",
-			"Set":    "Set_IPLD",
+			"List":   "List_IPLD",
 		}),
 	))
 
@@ -72,7 +72,7 @@ func main() {
 		schema.SpawnStructRepresentationMap(nil),
 	))
 
-	ts.Accumulate(schema.SpawnStruct("Set_IPLD",
+	ts.Accumulate(schema.SpawnStruct("List_IPLD",
 		[]schema.StructField{
 			schema.SpawnStructField("Tag", "String", false, false),
 			schema.SpawnStructField("Elements", "Nodes_IPLD", false, false),

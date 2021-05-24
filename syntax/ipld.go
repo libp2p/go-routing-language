@@ -16,7 +16,7 @@ var ipldTypeTags = []string{
 	"Int_IPLD",
 	"Bool_IPLD",
 	"Dict_IPLD",
-	"Set_IPLD",
+	"List_IPLD",
 }
 
 // FromIPLD transforms an IPLD Node into its xr.Node representation
@@ -57,8 +57,8 @@ func FromIPLD(n ipld.Node) (Node, error) {
 		}
 		return Float{big.NewFloat(b).SetPrec(64)}, nil
 
-	case xipld.Set_IPLD:
-		return fromIPLDToSet(n1)
+	case xipld.List_IPLD:
+		return fromIPLDToList(n1)
 
 	case xipld.Dict_IPLD:
 		return fromIPLDToDict(n1)
@@ -77,12 +77,12 @@ func FromIPLD(n ipld.Node) (Node, error) {
 	return nil, fmt.Errorf("IPLD type for xr.Node not found. Can't convert.")
 }
 
-// Creates a Set in XR from Set_IPLD
-func fromIPLDToSet(n xipld.Set_IPLD) (Set, error) {
+// Creates a List in XR from List_IPLD
+func fromIPLDToList(n xipld.List_IPLD) (List, error) {
 	// Get Tag
 	tag, err := n.FieldTag().AsString()
 	if err != nil {
-		return Set{}, err
+		return List{}, err
 	}
 
 	// Get elements
@@ -92,13 +92,13 @@ func fromIPLDToSet(n xipld.Set_IPLD) (Set, error) {
 		_, enode := li.Next()
 		n, err := FromIPLD(enode)
 		if err != nil {
-			return Set{}, err
+			return List{}, err
 		}
 		// Append element
 		els = append(els, n)
 	}
 
-	return Set{Tag: tag, Elements: els}, nil
+	return List{Tag: tag, Elements: els}, nil
 }
 
 // Create Dict in XR from Dict_IPLD

@@ -27,10 +27,10 @@ func IsEqual(x, y Node) bool {
 		case Dict:
 			return IsEqualDict(x1, y1)
 		}
-	case Set:
+	case List:
 		switch y1 := y.(type) {
-		case Set:
-			return IsEqualSet(x1, y1)
+		case List:
+			return IsEqualList(x1, y1)
 		}
 	}
 	return false
