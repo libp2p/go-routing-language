@@ -17,10 +17,10 @@ func IsEqual(x, y Node) bool {
 		case Number:
 			return IsEqualNumber(x1, y1)
 		}
-	case Blob:
+	case Bytes:
 		switch y1 := y.(type) {
-		case Blob:
-			return IsEqualBlob(x1, y1)
+		case Bytes:
+			return IsEqualBytes(x1, y1)
 		}
 	case Dict:
 		switch y1 := y.(type) {

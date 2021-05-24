@@ -10,29 +10,29 @@ import (
 	xipld "github.com/libp2p/go-routing-language/syntax/ipld"
 )
 
-type Blob struct {
+type Bytes struct {
 	Bytes []byte
 }
 
-func (b Blob) WritePretty(w io.Writer) error {
+func (b Bytes) WritePretty(w io.Writer) error {
 	_, err := fmt.Fprintf(w, "0x%s", hex.EncodeToString(b.Bytes)) // TODO: We can do better. E.g. wrap on 80-column boundary.
 	return err
 }
 
-func IsEqualBlob(x, y Blob) bool {
+func IsEqualBytes(x, y Bytes) bool {
 	return bytes.Compare(x.Bytes, y.Bytes) == 0
 }
 
 // ToIPLD converts xr.Node into its corresponding IPLD Node type
-func (b Blob) ToIPLD() (ipld.Node, error) {
-	return xipld.Type.Blob_IPLD.FromBytes(b.Bytes)
+func (b Bytes) ToIPLD() (ipld.Node, error) {
+	return xipld.Type.Bytes_IPLD.FromBytes(b.Bytes)
 }
 
 // toNode_IPLD convert into IPLD Node of dynamic type NODE_IPLD
-func (b Blob) toNode_IPLD() (ipld.Node, error) {
+func (b Bytes) toNode_IPLD() (ipld.Node, error) {
 	t := xipld.Type.Node_IPLD.NewBuilder()
 	ma, err := t.BeginMap(-1)
-	asm, err := ma.AssembleEntry("Blob_IPLD")
+	asm, err := ma.AssembleEntry("Bytes_IPLD")
 	if err != nil {
 		return nil, err
 	}

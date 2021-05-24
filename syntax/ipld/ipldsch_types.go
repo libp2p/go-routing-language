@@ -19,10 +19,10 @@ var _ ipld.Node = nil // suppress errors when this dependency is not referenced
 var Type typeSlab
 
 type typeSlab struct {
-	Blob_IPLD       _Blob_IPLD__Prototype
-	Blob_IPLD__Repr _Blob_IPLD__ReprPrototype
 	Bool_IPLD       _Bool_IPLD__Prototype
 	Bool_IPLD__Repr _Bool_IPLD__ReprPrototype
+	Bytes_IPLD       _Bytes_IPLD__Prototype
+	Bytes_IPLD__Repr _Bytes_IPLD__ReprPrototype
 	Dict_IPLD       _Dict_IPLD__Prototype
 	Dict_IPLD__Repr _Dict_IPLD__ReprPrototype
 	Float_IPLD       _Float_IPLD__Prototype
@@ -47,13 +47,13 @@ type typeSlab struct {
 
 // --- type definitions follow ---
 
-// Blob_IPLD matches the IPLD Schema type "Blob_IPLD".  It has bytes kind.
-type Blob_IPLD = *_Blob_IPLD
-type _Blob_IPLD struct{ x []byte }
-
 // Bool_IPLD matches the IPLD Schema type "Bool_IPLD".  It has bool kind.
 type Bool_IPLD = *_Bool_IPLD
 type _Bool_IPLD struct{ x bool }
+
+// Bytes_IPLD matches the IPLD Schema type "Bytes_IPLD".  It has bytes kind.
+type Bytes_IPLD = *_Bytes_IPLD
+type _Bytes_IPLD struct{ x []byte }
 
 // Dict_IPLD matches the IPLD Schema type "Dict_IPLD".  It has Struct type-kind, and may be interrogated like map kind.
 type Dict_IPLD = *_Dict_IPLD
@@ -80,7 +80,7 @@ type _Node_IPLD__iface interface {
 	_Node_IPLD__member()
 }
 func (_String_IPLD) _Node_IPLD__member() {}
-func (_Blob_IPLD) _Node_IPLD__member() {}
+func (_Bytes_IPLD) _Node_IPLD__member() {}
 func (_Int_IPLD) _Node_IPLD__member() {}
 func (_Float_IPLD) _Node_IPLD__member() {}
 func (_Bool_IPLD) _Node_IPLD__member() {}

@@ -9,8 +9,8 @@ import (
 	xipld "github.com/libp2p/go-routing-language/syntax/ipld"
 )
 
-func TestBlobIPLD(t *testing.T) {
-	b := Blob{[]byte("test")}
+func TestBytesIPLD(t *testing.T) {
+	b := Bytes{[]byte("test")}
 	bi, err := b.ToIPLD()
 	if err != nil {
 		t.Fatal(err)
@@ -20,7 +20,7 @@ func TestBlobIPLD(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !IsEqual(b, bo) {
-		t.Fatal("e2e IPLD Blob transformation failed", b, bo)
+		t.Fatal("e2e IPLD Bytes transformation failed", b, bo)
 	}
 }
 
@@ -87,7 +87,7 @@ func TestFloatIPLD(t *testing.T) {
 func TestSetIPLD(t *testing.T) {
 	n1 := Bool{true}
 	n2 := String{"testing!"}
-	n3 := Blob{[]byte("test")}
+	n3 := Bytes{[]byte("test")}
 	n4 := Int{big.NewInt(567)}
 
 	b := Set{
@@ -135,8 +135,8 @@ func TestCBORMarshalCBOR(t *testing.T) {
 			{String{"bar1"}, String{"baz"}},
 			{Int{big.NewInt(567)}, String{"baz"}},
 			{String{"bar2"}, Int{big.NewInt(567)}},
-			{String{"bar3"}, Blob{[]byte("asdf")}},
-			{Blob{[]byte("asdf")}, Int{big.NewInt(567)}},
+			{String{"bar3"}, Bytes{[]byte("asdf")}},
+			{Bytes{[]byte("asdf")}, Int{big.NewInt(567)}},
 			{String{"bar4"}, Dict{
 				Tag: "foo2",
 				Pairs: Pairs{
@@ -163,7 +163,7 @@ func TestCBORMarshalCBOR(t *testing.T) {
 	}
 	no, err := FromIPLD(noipld.Build())
 	if !IsEqual(n, no) {
-		t.Fatal("Marshalled Blob nodes not equal")
+		t.Fatal("Marshalled Bytes nodes not equal")
 	}
 
 }

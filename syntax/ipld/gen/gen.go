@@ -26,7 +26,7 @@ func main() {
 	ts.Accumulate(schema.SpawnString("String"))
 
 	ts.Accumulate(schema.SpawnString("String_IPLD"))
-	ts.Accumulate(schema.SpawnBytes("Blob_IPLD"))
+	ts.Accumulate(schema.SpawnBytes("Bytes_IPLD"))
 	ts.Accumulate(schema.SpawnInt("Int_IPLD"))
 	ts.Accumulate(schema.SpawnFloat("Float_IPLD"))
 	ts.Accumulate(schema.SpawnBool("Bool_IPLD"))
@@ -34,7 +34,7 @@ func main() {
 	ts.Accumulate(schema.SpawnUnion("Node_IPLD",
 		[]schema.TypeName{
 			"String_IPLD",
-			"Blob_IPLD",
+			"Bytes_IPLD",
 			"Int_IPLD",
 			"Float_IPLD",
 			"Bool_IPLD",
@@ -45,7 +45,7 @@ func main() {
 		// Keys for the JSON representation of types
 		schema.SpawnUnionRepresentationKeyed(map[string]schema.TypeName{
 			"String": "String_IPLD",
-			"Blob":   "Blob_IPLD",
+			"Bytes":  "Bytes_IPLD",
 			"Int":    "Int_IPLD",
 			"Float":  "Float_IPLD",
 			"Bool":   "Bool_IPLD",

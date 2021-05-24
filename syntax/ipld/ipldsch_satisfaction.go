@@ -8,209 +8,6 @@ import (
 	"github.com/ipld/go-ipld-prime/schema"
 )
 
-func (n Blob_IPLD) Bytes() []byte {
-	return n.x
-}
-func (_Blob_IPLD__Prototype) FromBytes(v []byte) (Blob_IPLD, error) {
-	n := _Blob_IPLD{v}
-	return &n, nil
-}
-type _Blob_IPLD__Maybe struct {
-	m schema.Maybe
-	v Blob_IPLD
-}
-type MaybeBlob_IPLD = *_Blob_IPLD__Maybe
-
-func (m MaybeBlob_IPLD) IsNull() bool {
-	return m.m == schema.Maybe_Null
-}
-func (m MaybeBlob_IPLD) IsAbsent() bool {
-	return m.m == schema.Maybe_Absent
-}
-func (m MaybeBlob_IPLD) Exists() bool {
-	return m.m == schema.Maybe_Value
-}
-func (m MaybeBlob_IPLD) AsNode() ipld.Node {
-	switch m.m {
-		case schema.Maybe_Absent:
-			return ipld.Absent
-		case schema.Maybe_Null:
-			return ipld.Null
-		case schema.Maybe_Value:
-			return m.v
-		default:
-			panic("unreachable")
-	}
-}
-func (m MaybeBlob_IPLD) Must() Blob_IPLD {
-	if !m.Exists() {
-		panic("unbox of a maybe rejected")
-	}
-	return m.v
-}
-var _ ipld.Node = (Blob_IPLD)(&_Blob_IPLD{})
-var _ schema.TypedNode = (Blob_IPLD)(&_Blob_IPLD{})
-func (Blob_IPLD) Kind() ipld.Kind {
-	return ipld.Kind_Bytes
-}
-func (Blob_IPLD) LookupByString(string) (ipld.Node, error) {
-	return mixins.Bytes{"ipld.Blob_IPLD"}.LookupByString("")
-}
-func (Blob_IPLD) LookupByNode(ipld.Node) (ipld.Node, error) {
-	return mixins.Bytes{"ipld.Blob_IPLD"}.LookupByNode(nil)
-}
-func (Blob_IPLD) LookupByIndex(idx int64) (ipld.Node, error) {
-	return mixins.Bytes{"ipld.Blob_IPLD"}.LookupByIndex(0)
-}
-func (Blob_IPLD) LookupBySegment(seg ipld.PathSegment) (ipld.Node, error) {
-	return mixins.Bytes{"ipld.Blob_IPLD"}.LookupBySegment(seg)
-}
-func (Blob_IPLD) MapIterator() ipld.MapIterator {
-	return nil
-}
-func (Blob_IPLD) ListIterator() ipld.ListIterator {
-	return nil
-}
-func (Blob_IPLD) Length() int64 {
-	return -1
-}
-func (Blob_IPLD) IsAbsent() bool {
-	return false
-}
-func (Blob_IPLD) IsNull() bool {
-	return false
-}
-func (Blob_IPLD) AsBool() (bool, error) {
-	return mixins.Bytes{"ipld.Blob_IPLD"}.AsBool()
-}
-func (Blob_IPLD) AsInt() (int64, error) {
-	return mixins.Bytes{"ipld.Blob_IPLD"}.AsInt()
-}
-func (Blob_IPLD) AsFloat() (float64, error) {
-	return mixins.Bytes{"ipld.Blob_IPLD"}.AsFloat()
-}
-func (Blob_IPLD) AsString() (string, error) {
-	return mixins.Bytes{"ipld.Blob_IPLD"}.AsString()
-}
-func (n Blob_IPLD) AsBytes() ([]byte, error) {
-	return n.x, nil
-}
-func (Blob_IPLD) AsLink() (ipld.Link, error) {
-	return mixins.Bytes{"ipld.Blob_IPLD"}.AsLink()
-}
-func (Blob_IPLD) Prototype() ipld.NodePrototype {
-	return _Blob_IPLD__Prototype{}
-}
-type _Blob_IPLD__Prototype struct{}
-
-func (_Blob_IPLD__Prototype) NewBuilder() ipld.NodeBuilder {
-	var nb _Blob_IPLD__Builder
-	nb.Reset()
-	return &nb
-}
-type _Blob_IPLD__Builder struct {
-	_Blob_IPLD__Assembler
-}
-func (nb *_Blob_IPLD__Builder) Build() ipld.Node {
-	if *nb.m != schema.Maybe_Value {
-		panic("invalid state: cannot call Build on an assembler that's not finished")
-	}
-	return nb.w
-}
-func (nb *_Blob_IPLD__Builder) Reset() {
-	var w _Blob_IPLD
-	var m schema.Maybe
-	*nb = _Blob_IPLD__Builder{_Blob_IPLD__Assembler{w: &w, m: &m}}
-}
-type _Blob_IPLD__Assembler struct {
-	w *_Blob_IPLD
-	m *schema.Maybe
-}
-
-func (na *_Blob_IPLD__Assembler) reset() {}
-func (_Blob_IPLD__Assembler) BeginMap(sizeHint int64) (ipld.MapAssembler, error) {
-	return mixins.BytesAssembler{"ipld.Blob_IPLD"}.BeginMap(0)
-}
-func (_Blob_IPLD__Assembler) BeginList(sizeHint int64) (ipld.ListAssembler, error) {
-	return mixins.BytesAssembler{"ipld.Blob_IPLD"}.BeginList(0)
-}
-func (na *_Blob_IPLD__Assembler) AssignNull() error {
-	switch *na.m {
-	case allowNull:
-		*na.m = schema.Maybe_Null
-		return nil
-	case schema.Maybe_Absent:
-		return mixins.BytesAssembler{"ipld.Blob_IPLD"}.AssignNull()
-	case schema.Maybe_Value, schema.Maybe_Null:
-		panic("invalid state: cannot assign into assembler that's already finished")
-	}
-	panic("unreachable")
-}
-func (_Blob_IPLD__Assembler) AssignBool(bool) error {
-	return mixins.BytesAssembler{"ipld.Blob_IPLD"}.AssignBool(false)
-}
-func (_Blob_IPLD__Assembler) AssignInt(int64) error {
-	return mixins.BytesAssembler{"ipld.Blob_IPLD"}.AssignInt(0)
-}
-func (_Blob_IPLD__Assembler) AssignFloat(float64) error {
-	return mixins.BytesAssembler{"ipld.Blob_IPLD"}.AssignFloat(0)
-}
-func (_Blob_IPLD__Assembler) AssignString(string) error {
-	return mixins.BytesAssembler{"ipld.Blob_IPLD"}.AssignString("")
-}
-func (na *_Blob_IPLD__Assembler) AssignBytes(v []byte) error {
-	switch *na.m {
-	case schema.Maybe_Value, schema.Maybe_Null:
-		panic("invalid state: cannot assign into assembler that's already finished")
-	}
-	if na.w == nil {
-		na.w = &_Blob_IPLD{}
-	}
-	na.w.x = v
-	*na.m = schema.Maybe_Value
-	return nil
-}
-func (_Blob_IPLD__Assembler) AssignLink(ipld.Link) error {
-	return mixins.BytesAssembler{"ipld.Blob_IPLD"}.AssignLink(nil)
-}
-func (na *_Blob_IPLD__Assembler) AssignNode(v ipld.Node) error {
-	if v.IsNull() {
-		return na.AssignNull()
-	}
-	if v2, ok := v.(*_Blob_IPLD); ok {
-		switch *na.m {
-		case schema.Maybe_Value, schema.Maybe_Null:
-			panic("invalid state: cannot assign into assembler that's already finished")
-		}
-		if na.w == nil {
-			na.w = v2
-			*na.m = schema.Maybe_Value
-			return nil
-		}
-		*na.w = *v2
-		*na.m = schema.Maybe_Value
-		return nil
-	}
-	if v2, err := v.AsBytes(); err != nil {
-		return err
-	} else {
-		return na.AssignBytes(v2)
-	}
-}
-func (_Blob_IPLD__Assembler) Prototype() ipld.NodePrototype {
-	return _Blob_IPLD__Prototype{}
-}
-func (Blob_IPLD) Type() schema.Type {
-	return nil /*TODO:typelit*/
-}
-func (n Blob_IPLD) Representation() ipld.Node {
-	return (*_Blob_IPLD__Repr)(n)
-}
-type _Blob_IPLD__Repr = _Blob_IPLD
-var _ ipld.Node = &_Blob_IPLD__Repr{}
-type _Blob_IPLD__ReprPrototype = _Blob_IPLD__Prototype
-type _Blob_IPLD__ReprAssembler = _Blob_IPLD__Assembler
-
 func (n Bool_IPLD) Bool() bool {
 	return n.x
 }
@@ -413,6 +210,209 @@ type _Bool_IPLD__Repr = _Bool_IPLD
 var _ ipld.Node = &_Bool_IPLD__Repr{}
 type _Bool_IPLD__ReprPrototype = _Bool_IPLD__Prototype
 type _Bool_IPLD__ReprAssembler = _Bool_IPLD__Assembler
+
+func (n Bytes_IPLD) Bytes() []byte {
+	return n.x
+}
+func (_Bytes_IPLD__Prototype) FromBytes(v []byte) (Bytes_IPLD, error) {
+	n := _Bytes_IPLD{v}
+	return &n, nil
+}
+type _Bytes_IPLD__Maybe struct {
+	m schema.Maybe
+	v Bytes_IPLD
+}
+type MaybeBytes_IPLD = *_Bytes_IPLD__Maybe
+
+func (m MaybeBytes_IPLD) IsNull() bool {
+	return m.m == schema.Maybe_Null
+}
+func (m MaybeBytes_IPLD) IsAbsent() bool {
+	return m.m == schema.Maybe_Absent
+}
+func (m MaybeBytes_IPLD) Exists() bool {
+	return m.m == schema.Maybe_Value
+}
+func (m MaybeBytes_IPLD) AsNode() ipld.Node {
+	switch m.m {
+		case schema.Maybe_Absent:
+			return ipld.Absent
+		case schema.Maybe_Null:
+			return ipld.Null
+		case schema.Maybe_Value:
+			return m.v
+		default:
+			panic("unreachable")
+	}
+}
+func (m MaybeBytes_IPLD) Must() Bytes_IPLD {
+	if !m.Exists() {
+		panic("unbox of a maybe rejected")
+	}
+	return m.v
+}
+var _ ipld.Node = (Bytes_IPLD)(&_Bytes_IPLD{})
+var _ schema.TypedNode = (Bytes_IPLD)(&_Bytes_IPLD{})
+func (Bytes_IPLD) Kind() ipld.Kind {
+	return ipld.Kind_Bytes
+}
+func (Bytes_IPLD) LookupByString(string) (ipld.Node, error) {
+	return mixins.Bytes{"ipld.Bytes_IPLD"}.LookupByString("")
+}
+func (Bytes_IPLD) LookupByNode(ipld.Node) (ipld.Node, error) {
+	return mixins.Bytes{"ipld.Bytes_IPLD"}.LookupByNode(nil)
+}
+func (Bytes_IPLD) LookupByIndex(idx int64) (ipld.Node, error) {
+	return mixins.Bytes{"ipld.Bytes_IPLD"}.LookupByIndex(0)
+}
+func (Bytes_IPLD) LookupBySegment(seg ipld.PathSegment) (ipld.Node, error) {
+	return mixins.Bytes{"ipld.Bytes_IPLD"}.LookupBySegment(seg)
+}
+func (Bytes_IPLD) MapIterator() ipld.MapIterator {
+	return nil
+}
+func (Bytes_IPLD) ListIterator() ipld.ListIterator {
+	return nil
+}
+func (Bytes_IPLD) Length() int64 {
+	return -1
+}
+func (Bytes_IPLD) IsAbsent() bool {
+	return false
+}
+func (Bytes_IPLD) IsNull() bool {
+	return false
+}
+func (Bytes_IPLD) AsBool() (bool, error) {
+	return mixins.Bytes{"ipld.Bytes_IPLD"}.AsBool()
+}
+func (Bytes_IPLD) AsInt() (int64, error) {
+	return mixins.Bytes{"ipld.Bytes_IPLD"}.AsInt()
+}
+func (Bytes_IPLD) AsFloat() (float64, error) {
+	return mixins.Bytes{"ipld.Bytes_IPLD"}.AsFloat()
+}
+func (Bytes_IPLD) AsString() (string, error) {
+	return mixins.Bytes{"ipld.Bytes_IPLD"}.AsString()
+}
+func (n Bytes_IPLD) AsBytes() ([]byte, error) {
+	return n.x, nil
+}
+func (Bytes_IPLD) AsLink() (ipld.Link, error) {
+	return mixins.Bytes{"ipld.Bytes_IPLD"}.AsLink()
+}
+func (Bytes_IPLD) Prototype() ipld.NodePrototype {
+	return _Bytes_IPLD__Prototype{}
+}
+type _Bytes_IPLD__Prototype struct{}
+
+func (_Bytes_IPLD__Prototype) NewBuilder() ipld.NodeBuilder {
+	var nb _Bytes_IPLD__Builder
+	nb.Reset()
+	return &nb
+}
+type _Bytes_IPLD__Builder struct {
+	_Bytes_IPLD__Assembler
+}
+func (nb *_Bytes_IPLD__Builder) Build() ipld.Node {
+	if *nb.m != schema.Maybe_Value {
+		panic("invalid state: cannot call Build on an assembler that's not finished")
+	}
+	return nb.w
+}
+func (nb *_Bytes_IPLD__Builder) Reset() {
+	var w _Bytes_IPLD
+	var m schema.Maybe
+	*nb = _Bytes_IPLD__Builder{_Bytes_IPLD__Assembler{w: &w, m: &m}}
+}
+type _Bytes_IPLD__Assembler struct {
+	w *_Bytes_IPLD
+	m *schema.Maybe
+}
+
+func (na *_Bytes_IPLD__Assembler) reset() {}
+func (_Bytes_IPLD__Assembler) BeginMap(sizeHint int64) (ipld.MapAssembler, error) {
+	return mixins.BytesAssembler{"ipld.Bytes_IPLD"}.BeginMap(0)
+}
+func (_Bytes_IPLD__Assembler) BeginList(sizeHint int64) (ipld.ListAssembler, error) {
+	return mixins.BytesAssembler{"ipld.Bytes_IPLD"}.BeginList(0)
+}
+func (na *_Bytes_IPLD__Assembler) AssignNull() error {
+	switch *na.m {
+	case allowNull:
+		*na.m = schema.Maybe_Null
+		return nil
+	case schema.Maybe_Absent:
+		return mixins.BytesAssembler{"ipld.Bytes_IPLD"}.AssignNull()
+	case schema.Maybe_Value, schema.Maybe_Null:
+		panic("invalid state: cannot assign into assembler that's already finished")
+	}
+	panic("unreachable")
+}
+func (_Bytes_IPLD__Assembler) AssignBool(bool) error {
+	return mixins.BytesAssembler{"ipld.Bytes_IPLD"}.AssignBool(false)
+}
+func (_Bytes_IPLD__Assembler) AssignInt(int64) error {
+	return mixins.BytesAssembler{"ipld.Bytes_IPLD"}.AssignInt(0)
+}
+func (_Bytes_IPLD__Assembler) AssignFloat(float64) error {
+	return mixins.BytesAssembler{"ipld.Bytes_IPLD"}.AssignFloat(0)
+}
+func (_Bytes_IPLD__Assembler) AssignString(string) error {
+	return mixins.BytesAssembler{"ipld.Bytes_IPLD"}.AssignString("")
+}
+func (na *_Bytes_IPLD__Assembler) AssignBytes(v []byte) error {
+	switch *na.m {
+	case schema.Maybe_Value, schema.Maybe_Null:
+		panic("invalid state: cannot assign into assembler that's already finished")
+	}
+	if na.w == nil {
+		na.w = &_Bytes_IPLD{}
+	}
+	na.w.x = v
+	*na.m = schema.Maybe_Value
+	return nil
+}
+func (_Bytes_IPLD__Assembler) AssignLink(ipld.Link) error {
+	return mixins.BytesAssembler{"ipld.Bytes_IPLD"}.AssignLink(nil)
+}
+func (na *_Bytes_IPLD__Assembler) AssignNode(v ipld.Node) error {
+	if v.IsNull() {
+		return na.AssignNull()
+	}
+	if v2, ok := v.(*_Bytes_IPLD); ok {
+		switch *na.m {
+		case schema.Maybe_Value, schema.Maybe_Null:
+			panic("invalid state: cannot assign into assembler that's already finished")
+		}
+		if na.w == nil {
+			na.w = v2
+			*na.m = schema.Maybe_Value
+			return nil
+		}
+		*na.w = *v2
+		*na.m = schema.Maybe_Value
+		return nil
+	}
+	if v2, err := v.AsBytes(); err != nil {
+		return err
+	} else {
+		return na.AssignBytes(v2)
+	}
+}
+func (_Bytes_IPLD__Assembler) Prototype() ipld.NodePrototype {
+	return _Bytes_IPLD__Prototype{}
+}
+func (Bytes_IPLD) Type() schema.Type {
+	return nil /*TODO:typelit*/
+}
+func (n Bytes_IPLD) Representation() ipld.Node {
+	return (*_Bytes_IPLD__Repr)(n)
+}
+type _Bytes_IPLD__Repr = _Bytes_IPLD
+var _ ipld.Node = &_Bytes_IPLD__Repr{}
+type _Bytes_IPLD__ReprPrototype = _Bytes_IPLD__Prototype
+type _Bytes_IPLD__ReprAssembler = _Bytes_IPLD__Assembler
 
 
 func (n _Dict_IPLD) FieldTag() String {
@@ -1761,7 +1761,7 @@ func (m MaybeNode_IPLD) Must() Node_IPLD {
 }
 var (
 	memberName__Node_IPLD_String_IPLD = _String{"String_IPLD"}
-	memberName__Node_IPLD_Blob_IPLD = _String{"Blob_IPLD"}
+	memberName__Node_IPLD_Bytes_IPLD = _String{"Bytes_IPLD"}
 	memberName__Node_IPLD_Int_IPLD = _String{"Int_IPLD"}
 	memberName__Node_IPLD_Float_IPLD = _String{"Float_IPLD"}
 	memberName__Node_IPLD_Bool_IPLD = _String{"Bool_IPLD"}
@@ -1781,8 +1781,8 @@ func (n Node_IPLD) LookupByString(key string) (ipld.Node, error) {
 		} else {
 			return nil, ipld.ErrNotExists{Segment: ipld.PathSegmentOfString(key)}
 		}
-	case "Blob_IPLD":
-		if n2, ok := n.x.(Blob_IPLD); ok {
+	case "Bytes_IPLD":
+		if n2, ok := n.x.(Bytes_IPLD); ok {
 			return n2, nil
 		} else {
 			return nil, ipld.ErrNotExists{Segment: ipld.PathSegmentOfString(key)}
@@ -1850,8 +1850,8 @@ func (itr *_Node_IPLD__MapItr) Next() (k ipld.Node, v ipld.Node, _ error) {
 	switch n2 := itr.n.x.(type) {
 	case String_IPLD:
 		k, v = &memberName__Node_IPLD_String_IPLD, n2
-	case Blob_IPLD:
-		k, v = &memberName__Node_IPLD_Blob_IPLD, n2
+	case Bytes_IPLD:
+		k, v = &memberName__Node_IPLD_Bytes_IPLD, n2
 	case Int_IPLD:
 		k, v = &memberName__Node_IPLD_Int_IPLD, n2
 	case Float_IPLD:
@@ -1934,7 +1934,7 @@ type _Node_IPLD__Assembler struct {
 	cm schema.Maybe
 	ca1 *_String_IPLD__Assembler
 	
-	ca2 *_Blob_IPLD__Assembler
+	ca2 *_Bytes_IPLD__Assembler
 	
 	ca3 *_Int_IPLD__Assembler
 	
@@ -2105,13 +2105,13 @@ func (ma *_Node_IPLD__Assembler) AssembleEntry(k string) (ipld.NodeAssembler, er
 		ma.ca1.w = x
 		ma.ca1.m = &ma.cm
 		return ma.ca1, nil
-	case "Blob_IPLD":
+	case "Bytes_IPLD":
 		ma.state = maState_midValue
 		ma.ca = 2
-		x := &_Blob_IPLD{}
+		x := &_Bytes_IPLD{}
 		ma.w.x = x
 		if ma.ca2 == nil {
-			ma.ca2 = &_Blob_IPLD__Assembler{}
+			ma.ca2 = &_Bytes_IPLD__Assembler{}
 		}
 		ma.ca2.w = x
 		ma.ca2.m = &ma.cm
@@ -2217,10 +2217,10 @@ func (ma *_Node_IPLD__Assembler) AssembleValue() ipld.NodeAssembler {
 		ma.ca1.m = &ma.cm
 		return ma.ca1
 	case 1:
-		x := &_Blob_IPLD{}
+		x := &_Bytes_IPLD{}
 		ma.w.x = x
 		if ma.ca2 == nil {
-			ma.ca2 = &_Blob_IPLD__Assembler{}
+			ma.ca2 = &_Bytes_IPLD__Assembler{}
 		}
 		ma.ca2.w = x
 		ma.ca2.m = &ma.cm
@@ -2303,8 +2303,8 @@ func (ma *_Node_IPLD__Assembler) ValuePrototype(k string) ipld.NodePrototype {
 	switch k {
 	case "String_IPLD":
 		return _String_IPLD__Prototype{}
-	case "Blob_IPLD":
-		return _Blob_IPLD__Prototype{}
+	case "Bytes_IPLD":
+		return _Bytes_IPLD__Prototype{}
 	case "Int_IPLD":
 		return _Int_IPLD__Prototype{}
 	case "Float_IPLD":
@@ -2350,7 +2350,7 @@ func (ka *_Node_IPLD__KeyAssembler) AssignString(k string) error {
 		ka.ca = 1
 		ka.state = maState_expectValue
 		return nil
-	case "Blob_IPLD":
+	case "Bytes_IPLD":
 		ka.ca = 2
 		ka.state = maState_expectValue
 		return nil
@@ -2402,7 +2402,7 @@ func (n Node_IPLD) Representation() ipld.Node {
 type _Node_IPLD__Repr _Node_IPLD
 var (
 	memberName__Node_IPLD_String_IPLD_serial = _String{"String"}
-	memberName__Node_IPLD_Blob_IPLD_serial = _String{"Blob"}
+	memberName__Node_IPLD_Bytes_IPLD_serial = _String{"Bytes"}
 	memberName__Node_IPLD_Int_IPLD_serial = _String{"Int"}
 	memberName__Node_IPLD_Float_IPLD_serial = _String{"Float"}
 	memberName__Node_IPLD_Bool_IPLD_serial = _String{"Bool"}
@@ -2421,8 +2421,8 @@ func (n *_Node_IPLD__Repr) LookupByString(key string) (ipld.Node, error) {
 		} else {
 			return nil, ipld.ErrNotExists{Segment: ipld.PathSegmentOfString(key)}
 		}
-	case "Blob":
-		if n2, ok := n.x.(Blob_IPLD); ok {
+	case "Bytes":
+		if n2, ok := n.x.(Bytes_IPLD); ok {
 			return n2.Representation(), nil
 		} else {
 			return nil, ipld.ErrNotExists{Segment: ipld.PathSegmentOfString(key)}
@@ -2490,8 +2490,8 @@ func (itr *_Node_IPLD__ReprMapItr) Next() (k ipld.Node, v ipld.Node, _ error) {
 	switch n2 := itr.n.x.(type) {
 	case String_IPLD:
 		k, v = &memberName__Node_IPLD_String_IPLD_serial, n2.Representation()
-	case Blob_IPLD:
-		k, v = &memberName__Node_IPLD_Blob_IPLD_serial, n2.Representation()
+	case Bytes_IPLD:
+		k, v = &memberName__Node_IPLD_Bytes_IPLD_serial, n2.Representation()
 	case Int_IPLD:
 		k, v = &memberName__Node_IPLD_Int_IPLD_serial, n2.Representation()
 	case Float_IPLD:
@@ -2574,7 +2574,7 @@ type _Node_IPLD__ReprAssembler struct {
 	cm schema.Maybe
 	ca1 *_String_IPLD__ReprAssembler
 	
-	ca2 *_Blob_IPLD__ReprAssembler
+	ca2 *_Bytes_IPLD__ReprAssembler
 	
 	ca3 *_Int_IPLD__ReprAssembler
 	
@@ -2745,13 +2745,13 @@ func (ma *_Node_IPLD__ReprAssembler) AssembleEntry(k string) (ipld.NodeAssembler
 		ma.ca1.w = x
 		ma.ca1.m = &ma.cm
 		return ma.ca1, nil
-	case "Blob":
+	case "Bytes":
 		ma.state = maState_midValue
 		ma.ca = 2
-		x := &_Blob_IPLD{}
+		x := &_Bytes_IPLD{}
 		ma.w.x = x
 		if ma.ca2 == nil {
-			ma.ca2 = &_Blob_IPLD__ReprAssembler{}
+			ma.ca2 = &_Bytes_IPLD__ReprAssembler{}
 		}
 		ma.ca2.w = x
 		ma.ca2.m = &ma.cm
@@ -2857,10 +2857,10 @@ func (ma *_Node_IPLD__ReprAssembler) AssembleValue() ipld.NodeAssembler {
 		ma.ca1.m = &ma.cm
 		return ma.ca1
 	case 1:
-		x := &_Blob_IPLD{}
+		x := &_Bytes_IPLD{}
 		ma.w.x = x
 		if ma.ca2 == nil {
-			ma.ca2 = &_Blob_IPLD__ReprAssembler{}
+			ma.ca2 = &_Bytes_IPLD__ReprAssembler{}
 		}
 		ma.ca2.w = x
 		ma.ca2.m = &ma.cm
@@ -2943,8 +2943,8 @@ func (ma *_Node_IPLD__ReprAssembler) ValuePrototype(k string) ipld.NodePrototype
 	switch k {
 	case "String_IPLD":
 		return _String_IPLD__ReprPrototype{}
-	case "Blob_IPLD":
-		return _Blob_IPLD__ReprPrototype{}
+	case "Bytes_IPLD":
+		return _Bytes_IPLD__ReprPrototype{}
 	case "Int_IPLD":
 		return _Int_IPLD__ReprPrototype{}
 	case "Float_IPLD":
@@ -2990,7 +2990,7 @@ func (ka *_Node_IPLD__ReprKeyAssembler) AssignString(k string) error {
 		ka.ca = 1
 		ka.state = maState_expectValue
 		return nil
-	case "Blob":
+	case "Bytes":
 		ka.ca = 2
 		ka.state = maState_expectValue
 		return nil

@@ -14,8 +14,8 @@ func TestMarshale2e(t *testing.T) {
 			{String{"bar1"}, String{"baz"}},
 			{Int{big.NewInt(567)}, String{"baz"}},
 			{String{"bar2"}, Int{big.NewInt(567)}},
-			{String{"bar3"}, Blob{[]byte("asdf")}},
-			{Blob{[]byte("asdf")}, Int{big.NewInt(567)}},
+			{String{"bar3"}, Bytes{[]byte("asdf")}},
+			{Bytes{[]byte("asdf")}, Int{big.NewInt(567)}},
 			{String{"bar4"}, Dict{
 				Tag: "foo2",
 				Pairs: Pairs{
@@ -95,8 +95,8 @@ func TestMarshalBool(t *testing.T) {
 	}
 }
 
-func TestMarshalBlob(t *testing.T) {
-	n := Blob{[]byte("testing!")}
+func TestMarshalBytes(t *testing.T) {
+	n := Bytes{[]byte("testing!")}
 	b, err := MarshalJSON(n)
 	if err != nil {
 		t.Fatal(err)
@@ -194,8 +194,8 @@ func TestIPLDE2ESerialize(t *testing.T) {
 			{String{"bar1"}, String{"baz"}},
 			{Int{big.NewInt(567)}, String{"baz"}},
 			{String{"bar2"}, Int{big.NewInt(567)}},
-			{String{"bar3"}, Blob{[]byte("asdf")}},
-			{Blob{[]byte("asdf")}, Int{big.NewInt(567)}},
+			{String{"bar3"}, Bytes{[]byte("asdf")}},
+			{Bytes{[]byte("asdf")}, Int{big.NewInt(567)}},
 			{String{"bar4"}, Dict{
 				Tag: "foo2",
 				Pairs: Pairs{

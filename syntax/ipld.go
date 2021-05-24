@@ -11,7 +11,7 @@ import (
 // ipldTypeTags used in Node_IPLD type
 var ipldTypeTags = []string{
 	"String_IPLD",
-	"Blob_IPLD",
+	"Bytes_IPLD",
 	"Float_IPLD",
 	"Int_IPLD",
 	"Bool_IPLD",
@@ -22,12 +22,12 @@ var ipldTypeTags = []string{
 // FromIPLD transforms an IPLD Node into its xr.Node representation
 func FromIPLD(n ipld.Node) (Node, error) {
 	switch n1 := n.(type) {
-	case xipld.Blob_IPLD:
+	case xipld.Bytes_IPLD:
 		b, err := n1.AsBytes()
 		if err != nil {
 			return nil, err
 		}
-		return Blob{b}, nil
+		return Bytes{b}, nil
 
 	case xipld.Bool_IPLD:
 		b, err := n1.AsBool()
