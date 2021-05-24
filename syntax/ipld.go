@@ -79,12 +79,6 @@ func FromIPLD(n ipld.Node) (Node, error) {
 
 // Creates a List in XR from List_IPLD
 func fromIPLDToList(n xipld.List_IPLD) (List, error) {
-	// Get Tag
-	tag, err := n.FieldTag().AsString()
-	if err != nil {
-		return List{}, err
-	}
-
 	// Get elements
 	els := make([]Node, 0)
 	li := n.FieldElements().Iterator()
@@ -98,17 +92,11 @@ func fromIPLDToList(n xipld.List_IPLD) (List, error) {
 		els = append(els, n)
 	}
 
-	return List{Tag: tag, Elements: els}, nil
+	return List{Elements: els}, nil
 }
 
 // Create Dict in XR from Dict_IPLD
 func fromIPLDToDict(n xipld.Dict_IPLD) (Dict, error) {
-	// Get Tag
-	tag, err := n.FieldTag().AsString()
-	if err != nil {
-		return Dict{}, err
-	}
-
 	// Get pairs
 	pairs := make([]Pair, 0)
 	li := n.FieldPairs().Iterator()
@@ -129,6 +117,6 @@ func fromIPLDToDict(n xipld.Dict_IPLD) (Dict, error) {
 		// Append pair
 		pairs = append(pairs, Pair{Key: k, Value: v})
 	}
-	return Dict{Tag: tag, Pairs: pairs}, nil
+	return Dict{Pairs: pairs}, nil
 
 }

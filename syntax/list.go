@@ -10,7 +10,6 @@ import (
 
 // List is a set of (uniquely) elements.
 type List struct {
-	Tag      string
 	Elements Nodes
 }
 
@@ -18,7 +17,6 @@ func (s List) Copy() List {
 	e := make(Nodes, len(s.Elements))
 	copy(e, s.Elements)
 	return List{
-		Tag:      s.Tag,
 		Elements: e,
 	}
 }
@@ -28,10 +26,7 @@ func (s List) Len() int {
 }
 
 func (s List) WritePretty(w io.Writer) error {
-	if _, err := w.Write([]byte(s.Tag)); err != nil {
-		return err
-	}
-	if _, err := w.Write([]byte{'{'}); err != nil {
+	if _, err := w.Write([]byte{'['}); err != nil {
 		return err
 	}
 	u := IndentWriter(w)
@@ -52,16 +47,13 @@ func (s List) WritePretty(w io.Writer) error {
 			}
 		}
 	}
-	if _, err := w.Write([]byte{'}'}); err != nil {
+	if _, err := w.Write([]byte{']'}); err != nil {
 		return err
 	}
 	return nil
 }
 
 func IsEqualList(x, y List) bool {
-	if x.Tag != y.Tag {
-		return false
-	}
 	return AreSameNodes(x.Elements, y.Elements)
 }
 
@@ -71,15 +63,6 @@ func (s List) ToIPLD() (ipld.Node, error) {
 	// Initialize Dict
 	sbuild := xipld.Type.List_IPLD.NewBuilder()
 	ma, err := sbuild.BeginMap(-1)
-	if err != nil {
-		return nil, err
-	}
-	// Assign tag
-	tasm, err := ma.AssembleEntry("Tag")
-	if err != nil {
-		return nil, err
-	}
-	err = tasm.AssignString(s.Tag)
 	if err != nil {
 		return nil, err
 	}

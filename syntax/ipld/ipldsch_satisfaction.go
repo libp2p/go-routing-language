@@ -415,9 +415,6 @@ type _Bytes_IPLD__ReprPrototype = _Bytes_IPLD__Prototype
 type _Bytes_IPLD__ReprAssembler = _Bytes_IPLD__Assembler
 
 
-func (n _Dict_IPLD) FieldTag() String {
-	return &n.Tag
-}
 func (n _Dict_IPLD) FieldPairs() Pairs_IPLD {
 	return &n.Pairs
 }
@@ -455,7 +452,6 @@ func (m MaybeDict_IPLD) Must() Dict_IPLD {
 	return m.v
 }
 var (
-	fieldName__Dict_IPLD_Tag = _String{"Tag"}
 	fieldName__Dict_IPLD_Pairs = _String{"Pairs"}
 )
 var _ ipld.Node = (Dict_IPLD)(&_Dict_IPLD{})
@@ -465,8 +461,6 @@ func (Dict_IPLD) Kind() ipld.Kind {
 }
 func (n Dict_IPLD) LookupByString(key string) (ipld.Node, error) {
 	switch key {
-	case "Tag":
-		return &n.Tag, nil
 	case "Pairs":
 		return &n.Pairs, nil
 	default:
@@ -495,14 +489,11 @@ type _Dict_IPLD__MapItr struct {
 	idx  int
 }
 
-func (itr *_Dict_IPLD__MapItr) Next() (k ipld.Node, v ipld.Node, _ error) {if itr.idx >= 2 {
+func (itr *_Dict_IPLD__MapItr) Next() (k ipld.Node, v ipld.Node, _ error) {if itr.idx >= 1 {
 		return nil, nil, ipld.ErrIteratorOverread{}
 	}
 	switch itr.idx {
 	case 0:
-		k = &fieldName__Dict_IPLD_Tag
-		v = &itr.n.Tag
-	case 1:
 		k = &fieldName__Dict_IPLD_Pairs
 		v = &itr.n.Pairs
 	default:
@@ -512,14 +503,14 @@ func (itr *_Dict_IPLD__MapItr) Next() (k ipld.Node, v ipld.Node, _ error) {if it
 	return
 }
 func (itr *_Dict_IPLD__MapItr) Done() bool {
-	return itr.idx >= 2
+	return itr.idx >= 1
 }
 
 func (Dict_IPLD) ListIterator() ipld.ListIterator {
 	return nil
 }
 func (Dict_IPLD) Length() int64 {
-	return 2
+	return 1
 }
 func (Dict_IPLD) IsAbsent() bool {
 	return false
@@ -577,21 +568,18 @@ type _Dict_IPLD__Assembler struct {
 	f int
 
 	cm schema.Maybe
-	ca_Tag _String__Assembler
 	ca_Pairs _Pairs_IPLD__Assembler
 	}
 
 func (na *_Dict_IPLD__Assembler) reset() {
 	na.state = maState_initial
 	na.s = 0
-	na.ca_Tag.reset()
 	na.ca_Pairs.reset()
 }
 
 var (
-	fieldBit__Dict_IPLD_Tag = 1 << 0
-	fieldBit__Dict_IPLD_Pairs = 1 << 1
-	fieldBits__Dict_IPLD_sufficient = 0 + 1 << 0 + 1 << 1
+	fieldBit__Dict_IPLD_Pairs = 1 << 0
+	fieldBits__Dict_IPLD_sufficient = 0 + 1 << 0
 )
 func (na *_Dict_IPLD__Assembler) BeginMap(int64) (ipld.MapAssembler, error) {
 	switch *na.m {
@@ -687,16 +675,6 @@ func (ma *_Dict_IPLD__Assembler) valueFinishTidy() bool {
 	case 0:
 		switch ma.cm {
 		case schema.Maybe_Value:
-			ma.ca_Tag.w = nil
-			ma.cm = schema.Maybe_Absent
-			ma.state = maState_initial
-			return true
-		default:
-			return false
-		}
-	case 1:
-		switch ma.cm {
-		case schema.Maybe_Value:
 			ma.ca_Pairs.w = nil
 			ma.cm = schema.Maybe_Absent
 			ma.state = maState_initial
@@ -724,23 +702,13 @@ func (ma *_Dict_IPLD__Assembler) AssembleEntry(k string) (ipld.NodeAssembler, er
 		panic("invalid state: AssembleEntry cannot be called on an assembler that's already finished")
 	}
 	switch k {
-	case "Tag":
-		if ma.s & fieldBit__Dict_IPLD_Tag != 0 {
-			return nil, ipld.ErrRepeatedMapKey{Key: &fieldName__Dict_IPLD_Tag}
-		}
-		ma.s += fieldBit__Dict_IPLD_Tag
-		ma.state = maState_midValue
-		ma.f = 0
-		ma.ca_Tag.w = &ma.w.Tag
-		ma.ca_Tag.m = &ma.cm
-		return &ma.ca_Tag, nil
 	case "Pairs":
 		if ma.s & fieldBit__Dict_IPLD_Pairs != 0 {
 			return nil, ipld.ErrRepeatedMapKey{Key: &fieldName__Dict_IPLD_Pairs}
 		}
 		ma.s += fieldBit__Dict_IPLD_Pairs
 		ma.state = maState_midValue
-		ma.f = 1
+		ma.f = 0
 		ma.ca_Pairs.w = &ma.w.Pairs
 		ma.ca_Pairs.m = &ma.cm
 		return &ma.ca_Pairs, nil
@@ -781,10 +749,6 @@ func (ma *_Dict_IPLD__Assembler) AssembleValue() ipld.NodeAssembler {
 	ma.state = maState_midValue
 	switch ma.f {
 	case 0:
-		ma.ca_Tag.w = &ma.w.Tag
-		ma.ca_Tag.m = &ma.cm
-		return &ma.ca_Tag
-	case 1:
 		ma.ca_Pairs.w = &ma.w.Pairs
 		ma.ca_Pairs.m = &ma.cm
 		return &ma.ca_Pairs
@@ -809,9 +773,6 @@ func (ma *_Dict_IPLD__Assembler) Finish() error {
 	}
 	if ma.s & fieldBits__Dict_IPLD_sufficient != fieldBits__Dict_IPLD_sufficient {
 		err := ipld.ErrMissingRequiredField{Missing: make([]string, 0)}
-		if ma.s & fieldBit__Dict_IPLD_Tag == 0 {
-			err.Missing = append(err.Missing, "Tag")
-		}
 		if ma.s & fieldBit__Dict_IPLD_Pairs == 0 {
 			err.Missing = append(err.Missing, "Pairs")
 		}
@@ -851,20 +812,13 @@ func (ka *_Dict_IPLD__KeyAssembler) AssignString(k string) error {
 		panic("misuse: KeyAssembler held beyond its valid lifetime")
 	}
 	switch k {
-	case "Tag":
-		if ka.s & fieldBit__Dict_IPLD_Tag != 0 {
-			return ipld.ErrRepeatedMapKey{Key: &fieldName__Dict_IPLD_Tag}
-		}
-		ka.s += fieldBit__Dict_IPLD_Tag
-		ka.state = maState_expectValue
-		ka.f = 0
 	case "Pairs":
 		if ka.s & fieldBit__Dict_IPLD_Pairs != 0 {
 			return ipld.ErrRepeatedMapKey{Key: &fieldName__Dict_IPLD_Pairs}
 		}
 		ka.s += fieldBit__Dict_IPLD_Pairs
 		ka.state = maState_expectValue
-		ka.f = 1
+		ka.f = 0
 	default:
 		return ipld.ErrInvalidKey{TypeName:"ipld.Dict_IPLD", Key:&_String{k}}
 	}
@@ -894,7 +848,6 @@ func (n Dict_IPLD) Representation() ipld.Node {
 }
 type _Dict_IPLD__Repr _Dict_IPLD
 var (
-	fieldName__Dict_IPLD_Tag_serial = _String{"Tag"}
 	fieldName__Dict_IPLD_Pairs_serial = _String{"Pairs"}
 )
 var _ ipld.Node = &_Dict_IPLD__Repr{}
@@ -903,8 +856,6 @@ func (_Dict_IPLD__Repr) Kind() ipld.Kind {
 }
 func (n *_Dict_IPLD__Repr) LookupByString(key string) (ipld.Node, error) {
 	switch key {
-	case "Tag":
-		return n.Tag.Representation(), nil
 	case "Pairs":
 		return n.Pairs.Representation(), nil
 	default:
@@ -934,14 +885,11 @@ type _Dict_IPLD__ReprMapItr struct {
 	
 }
 
-func (itr *_Dict_IPLD__ReprMapItr) Next() (k ipld.Node, v ipld.Node, _ error) {if itr.idx >= 2 {
+func (itr *_Dict_IPLD__ReprMapItr) Next() (k ipld.Node, v ipld.Node, _ error) {if itr.idx >= 1 {
 		return nil, nil, ipld.ErrIteratorOverread{}
 	}
 	switch itr.idx {
 	case 0:
-		k = &fieldName__Dict_IPLD_Tag_serial
-		v = itr.n.Tag.Representation()
-	case 1:
 		k = &fieldName__Dict_IPLD_Pairs_serial
 		v = itr.n.Pairs.Representation()
 	default:
@@ -951,13 +899,13 @@ func (itr *_Dict_IPLD__ReprMapItr) Next() (k ipld.Node, v ipld.Node, _ error) {i
 	return
 }
 func (itr *_Dict_IPLD__ReprMapItr) Done() bool {
-	return itr.idx >= 2
+	return itr.idx >= 1
 }
 func (_Dict_IPLD__Repr) ListIterator() ipld.ListIterator {
 	return nil
 }
 func (rn *_Dict_IPLD__Repr) Length() int64 {
-	l := 2
+	l := 1
 	return int64(l)
 }
 func (_Dict_IPLD__Repr) IsAbsent() bool {
@@ -1016,14 +964,12 @@ type _Dict_IPLD__ReprAssembler struct {
 	f int
 
 	cm schema.Maybe
-	ca_Tag _String__ReprAssembler
 	ca_Pairs _Pairs_IPLD__ReprAssembler
 	}
 
 func (na *_Dict_IPLD__ReprAssembler) reset() {
 	na.state = maState_initial
 	na.s = 0
-	na.ca_Tag.reset()
 	na.ca_Pairs.reset()
 }
 func (na *_Dict_IPLD__ReprAssembler) BeginMap(int64) (ipld.MapAssembler, error) {
@@ -1125,14 +1071,6 @@ func (ma *_Dict_IPLD__ReprAssembler) valueFinishTidy() bool {
 		default:
 			return false
 		}
-	case 1:
-		switch ma.cm {
-		case schema.Maybe_Value:ma.cm = schema.Maybe_Absent
-			ma.state = maState_initial
-			return true
-		default:
-			return false
-		}
 	default:
 		panic("unreachable")
 	}
@@ -1153,23 +1091,13 @@ func (ma *_Dict_IPLD__ReprAssembler) AssembleEntry(k string) (ipld.NodeAssembler
 		panic("invalid state: AssembleEntry cannot be called on an assembler that's already finished")
 	}
 	switch k {
-	case "Tag":
-		if ma.s & fieldBit__Dict_IPLD_Tag != 0 {
-			return nil, ipld.ErrRepeatedMapKey{Key: &fieldName__Dict_IPLD_Tag_serial}
-		}
-		ma.s += fieldBit__Dict_IPLD_Tag
-		ma.state = maState_midValue
-		ma.f = 0
-		ma.ca_Tag.w = &ma.w.Tag
-		ma.ca_Tag.m = &ma.cm
-		return &ma.ca_Tag, nil
 	case "Pairs":
 		if ma.s & fieldBit__Dict_IPLD_Pairs != 0 {
 			return nil, ipld.ErrRepeatedMapKey{Key: &fieldName__Dict_IPLD_Pairs_serial}
 		}
 		ma.s += fieldBit__Dict_IPLD_Pairs
 		ma.state = maState_midValue
-		ma.f = 1
+		ma.f = 0
 		ma.ca_Pairs.w = &ma.w.Pairs
 		ma.ca_Pairs.m = &ma.cm
 		return &ma.ca_Pairs, nil
@@ -1211,10 +1139,6 @@ func (ma *_Dict_IPLD__ReprAssembler) AssembleValue() ipld.NodeAssembler {
 	ma.state = maState_midValue
 	switch ma.f {
 	case 0:
-		ma.ca_Tag.w = &ma.w.Tag
-		ma.ca_Tag.m = &ma.cm
-		return &ma.ca_Tag
-	case 1:
 		ma.ca_Pairs.w = &ma.w.Pairs
 		ma.ca_Pairs.m = &ma.cm
 		return &ma.ca_Pairs
@@ -1239,9 +1163,6 @@ func (ma *_Dict_IPLD__ReprAssembler) Finish() error {
 	}
 	if ma.s & fieldBits__Dict_IPLD_sufficient != fieldBits__Dict_IPLD_sufficient {
 		err := ipld.ErrMissingRequiredField{Missing: make([]string, 0)}
-		if ma.s & fieldBit__Dict_IPLD_Tag == 0 {
-			err.Missing = append(err.Missing, "Tag")
-		}
 		if ma.s & fieldBit__Dict_IPLD_Pairs == 0 {
 			err.Missing = append(err.Missing, "Pairs")
 		}
@@ -1281,21 +1202,13 @@ func (ka *_Dict_IPLD__ReprKeyAssembler) AssignString(k string) error {
 		panic("misuse: KeyAssembler held beyond its valid lifetime")
 	}
 	switch k {
-	case "Tag":
-		if ka.s & fieldBit__Dict_IPLD_Tag != 0 {
-			return ipld.ErrRepeatedMapKey{Key: &fieldName__Dict_IPLD_Tag_serial}
-		}
-		ka.s += fieldBit__Dict_IPLD_Tag
-		ka.state = maState_expectValue
-		ka.f = 0
-		return nil
 	case "Pairs":
 		if ka.s & fieldBit__Dict_IPLD_Pairs != 0 {
 			return ipld.ErrRepeatedMapKey{Key: &fieldName__Dict_IPLD_Pairs_serial}
 		}
 		ka.s += fieldBit__Dict_IPLD_Pairs
 		ka.state = maState_expectValue
-		ka.f = 1
+		ka.f = 0
 		return nil
 	}
 	return ipld.ErrInvalidKey{TypeName:"ipld.Dict_IPLD.Repr", Key:&_String{k}}
@@ -1724,9 +1637,6 @@ type _Int_IPLD__ReprPrototype = _Int_IPLD__Prototype
 type _Int_IPLD__ReprAssembler = _Int_IPLD__Assembler
 
 
-func (n _List_IPLD) FieldTag() String {
-	return &n.Tag
-}
 func (n _List_IPLD) FieldElements() Nodes_IPLD {
 	return &n.Elements
 }
@@ -1764,7 +1674,6 @@ func (m MaybeList_IPLD) Must() List_IPLD {
 	return m.v
 }
 var (
-	fieldName__List_IPLD_Tag = _String{"Tag"}
 	fieldName__List_IPLD_Elements = _String{"Elements"}
 )
 var _ ipld.Node = (List_IPLD)(&_List_IPLD{})
@@ -1774,8 +1683,6 @@ func (List_IPLD) Kind() ipld.Kind {
 }
 func (n List_IPLD) LookupByString(key string) (ipld.Node, error) {
 	switch key {
-	case "Tag":
-		return &n.Tag, nil
 	case "Elements":
 		return &n.Elements, nil
 	default:
@@ -1804,14 +1711,11 @@ type _List_IPLD__MapItr struct {
 	idx  int
 }
 
-func (itr *_List_IPLD__MapItr) Next() (k ipld.Node, v ipld.Node, _ error) {if itr.idx >= 2 {
+func (itr *_List_IPLD__MapItr) Next() (k ipld.Node, v ipld.Node, _ error) {if itr.idx >= 1 {
 		return nil, nil, ipld.ErrIteratorOverread{}
 	}
 	switch itr.idx {
 	case 0:
-		k = &fieldName__List_IPLD_Tag
-		v = &itr.n.Tag
-	case 1:
 		k = &fieldName__List_IPLD_Elements
 		v = &itr.n.Elements
 	default:
@@ -1821,14 +1725,14 @@ func (itr *_List_IPLD__MapItr) Next() (k ipld.Node, v ipld.Node, _ error) {if it
 	return
 }
 func (itr *_List_IPLD__MapItr) Done() bool {
-	return itr.idx >= 2
+	return itr.idx >= 1
 }
 
 func (List_IPLD) ListIterator() ipld.ListIterator {
 	return nil
 }
 func (List_IPLD) Length() int64 {
-	return 2
+	return 1
 }
 func (List_IPLD) IsAbsent() bool {
 	return false
@@ -1886,21 +1790,18 @@ type _List_IPLD__Assembler struct {
 	f int
 
 	cm schema.Maybe
-	ca_Tag _String__Assembler
 	ca_Elements _Nodes_IPLD__Assembler
 	}
 
 func (na *_List_IPLD__Assembler) reset() {
 	na.state = maState_initial
 	na.s = 0
-	na.ca_Tag.reset()
 	na.ca_Elements.reset()
 }
 
 var (
-	fieldBit__List_IPLD_Tag = 1 << 0
-	fieldBit__List_IPLD_Elements = 1 << 1
-	fieldBits__List_IPLD_sufficient = 0 + 1 << 0 + 1 << 1
+	fieldBit__List_IPLD_Elements = 1 << 0
+	fieldBits__List_IPLD_sufficient = 0 + 1 << 0
 )
 func (na *_List_IPLD__Assembler) BeginMap(int64) (ipld.MapAssembler, error) {
 	switch *na.m {
@@ -1996,16 +1897,6 @@ func (ma *_List_IPLD__Assembler) valueFinishTidy() bool {
 	case 0:
 		switch ma.cm {
 		case schema.Maybe_Value:
-			ma.ca_Tag.w = nil
-			ma.cm = schema.Maybe_Absent
-			ma.state = maState_initial
-			return true
-		default:
-			return false
-		}
-	case 1:
-		switch ma.cm {
-		case schema.Maybe_Value:
 			ma.ca_Elements.w = nil
 			ma.cm = schema.Maybe_Absent
 			ma.state = maState_initial
@@ -2033,23 +1924,13 @@ func (ma *_List_IPLD__Assembler) AssembleEntry(k string) (ipld.NodeAssembler, er
 		panic("invalid state: AssembleEntry cannot be called on an assembler that's already finished")
 	}
 	switch k {
-	case "Tag":
-		if ma.s & fieldBit__List_IPLD_Tag != 0 {
-			return nil, ipld.ErrRepeatedMapKey{Key: &fieldName__List_IPLD_Tag}
-		}
-		ma.s += fieldBit__List_IPLD_Tag
-		ma.state = maState_midValue
-		ma.f = 0
-		ma.ca_Tag.w = &ma.w.Tag
-		ma.ca_Tag.m = &ma.cm
-		return &ma.ca_Tag, nil
 	case "Elements":
 		if ma.s & fieldBit__List_IPLD_Elements != 0 {
 			return nil, ipld.ErrRepeatedMapKey{Key: &fieldName__List_IPLD_Elements}
 		}
 		ma.s += fieldBit__List_IPLD_Elements
 		ma.state = maState_midValue
-		ma.f = 1
+		ma.f = 0
 		ma.ca_Elements.w = &ma.w.Elements
 		ma.ca_Elements.m = &ma.cm
 		return &ma.ca_Elements, nil
@@ -2090,10 +1971,6 @@ func (ma *_List_IPLD__Assembler) AssembleValue() ipld.NodeAssembler {
 	ma.state = maState_midValue
 	switch ma.f {
 	case 0:
-		ma.ca_Tag.w = &ma.w.Tag
-		ma.ca_Tag.m = &ma.cm
-		return &ma.ca_Tag
-	case 1:
 		ma.ca_Elements.w = &ma.w.Elements
 		ma.ca_Elements.m = &ma.cm
 		return &ma.ca_Elements
@@ -2118,9 +1995,6 @@ func (ma *_List_IPLD__Assembler) Finish() error {
 	}
 	if ma.s & fieldBits__List_IPLD_sufficient != fieldBits__List_IPLD_sufficient {
 		err := ipld.ErrMissingRequiredField{Missing: make([]string, 0)}
-		if ma.s & fieldBit__List_IPLD_Tag == 0 {
-			err.Missing = append(err.Missing, "Tag")
-		}
 		if ma.s & fieldBit__List_IPLD_Elements == 0 {
 			err.Missing = append(err.Missing, "Elements")
 		}
@@ -2160,20 +2034,13 @@ func (ka *_List_IPLD__KeyAssembler) AssignString(k string) error {
 		panic("misuse: KeyAssembler held beyond its valid lifetime")
 	}
 	switch k {
-	case "Tag":
-		if ka.s & fieldBit__List_IPLD_Tag != 0 {
-			return ipld.ErrRepeatedMapKey{Key: &fieldName__List_IPLD_Tag}
-		}
-		ka.s += fieldBit__List_IPLD_Tag
-		ka.state = maState_expectValue
-		ka.f = 0
 	case "Elements":
 		if ka.s & fieldBit__List_IPLD_Elements != 0 {
 			return ipld.ErrRepeatedMapKey{Key: &fieldName__List_IPLD_Elements}
 		}
 		ka.s += fieldBit__List_IPLD_Elements
 		ka.state = maState_expectValue
-		ka.f = 1
+		ka.f = 0
 	default:
 		return ipld.ErrInvalidKey{TypeName:"ipld.List_IPLD", Key:&_String{k}}
 	}
@@ -2203,7 +2070,6 @@ func (n List_IPLD) Representation() ipld.Node {
 }
 type _List_IPLD__Repr _List_IPLD
 var (
-	fieldName__List_IPLD_Tag_serial = _String{"Tag"}
 	fieldName__List_IPLD_Elements_serial = _String{"Elements"}
 )
 var _ ipld.Node = &_List_IPLD__Repr{}
@@ -2212,8 +2078,6 @@ func (_List_IPLD__Repr) Kind() ipld.Kind {
 }
 func (n *_List_IPLD__Repr) LookupByString(key string) (ipld.Node, error) {
 	switch key {
-	case "Tag":
-		return n.Tag.Representation(), nil
 	case "Elements":
 		return n.Elements.Representation(), nil
 	default:
@@ -2243,14 +2107,11 @@ type _List_IPLD__ReprMapItr struct {
 	
 }
 
-func (itr *_List_IPLD__ReprMapItr) Next() (k ipld.Node, v ipld.Node, _ error) {if itr.idx >= 2 {
+func (itr *_List_IPLD__ReprMapItr) Next() (k ipld.Node, v ipld.Node, _ error) {if itr.idx >= 1 {
 		return nil, nil, ipld.ErrIteratorOverread{}
 	}
 	switch itr.idx {
 	case 0:
-		k = &fieldName__List_IPLD_Tag_serial
-		v = itr.n.Tag.Representation()
-	case 1:
 		k = &fieldName__List_IPLD_Elements_serial
 		v = itr.n.Elements.Representation()
 	default:
@@ -2260,13 +2121,13 @@ func (itr *_List_IPLD__ReprMapItr) Next() (k ipld.Node, v ipld.Node, _ error) {i
 	return
 }
 func (itr *_List_IPLD__ReprMapItr) Done() bool {
-	return itr.idx >= 2
+	return itr.idx >= 1
 }
 func (_List_IPLD__Repr) ListIterator() ipld.ListIterator {
 	return nil
 }
 func (rn *_List_IPLD__Repr) Length() int64 {
-	l := 2
+	l := 1
 	return int64(l)
 }
 func (_List_IPLD__Repr) IsAbsent() bool {
@@ -2325,14 +2186,12 @@ type _List_IPLD__ReprAssembler struct {
 	f int
 
 	cm schema.Maybe
-	ca_Tag _String__ReprAssembler
 	ca_Elements _Nodes_IPLD__ReprAssembler
 	}
 
 func (na *_List_IPLD__ReprAssembler) reset() {
 	na.state = maState_initial
 	na.s = 0
-	na.ca_Tag.reset()
 	na.ca_Elements.reset()
 }
 func (na *_List_IPLD__ReprAssembler) BeginMap(int64) (ipld.MapAssembler, error) {
@@ -2434,14 +2293,6 @@ func (ma *_List_IPLD__ReprAssembler) valueFinishTidy() bool {
 		default:
 			return false
 		}
-	case 1:
-		switch ma.cm {
-		case schema.Maybe_Value:ma.cm = schema.Maybe_Absent
-			ma.state = maState_initial
-			return true
-		default:
-			return false
-		}
 	default:
 		panic("unreachable")
 	}
@@ -2462,23 +2313,13 @@ func (ma *_List_IPLD__ReprAssembler) AssembleEntry(k string) (ipld.NodeAssembler
 		panic("invalid state: AssembleEntry cannot be called on an assembler that's already finished")
 	}
 	switch k {
-	case "Tag":
-		if ma.s & fieldBit__List_IPLD_Tag != 0 {
-			return nil, ipld.ErrRepeatedMapKey{Key: &fieldName__List_IPLD_Tag_serial}
-		}
-		ma.s += fieldBit__List_IPLD_Tag
-		ma.state = maState_midValue
-		ma.f = 0
-		ma.ca_Tag.w = &ma.w.Tag
-		ma.ca_Tag.m = &ma.cm
-		return &ma.ca_Tag, nil
 	case "Elements":
 		if ma.s & fieldBit__List_IPLD_Elements != 0 {
 			return nil, ipld.ErrRepeatedMapKey{Key: &fieldName__List_IPLD_Elements_serial}
 		}
 		ma.s += fieldBit__List_IPLD_Elements
 		ma.state = maState_midValue
-		ma.f = 1
+		ma.f = 0
 		ma.ca_Elements.w = &ma.w.Elements
 		ma.ca_Elements.m = &ma.cm
 		return &ma.ca_Elements, nil
@@ -2520,10 +2361,6 @@ func (ma *_List_IPLD__ReprAssembler) AssembleValue() ipld.NodeAssembler {
 	ma.state = maState_midValue
 	switch ma.f {
 	case 0:
-		ma.ca_Tag.w = &ma.w.Tag
-		ma.ca_Tag.m = &ma.cm
-		return &ma.ca_Tag
-	case 1:
 		ma.ca_Elements.w = &ma.w.Elements
 		ma.ca_Elements.m = &ma.cm
 		return &ma.ca_Elements
@@ -2548,9 +2385,6 @@ func (ma *_List_IPLD__ReprAssembler) Finish() error {
 	}
 	if ma.s & fieldBits__List_IPLD_sufficient != fieldBits__List_IPLD_sufficient {
 		err := ipld.ErrMissingRequiredField{Missing: make([]string, 0)}
-		if ma.s & fieldBit__List_IPLD_Tag == 0 {
-			err.Missing = append(err.Missing, "Tag")
-		}
 		if ma.s & fieldBit__List_IPLD_Elements == 0 {
 			err.Missing = append(err.Missing, "Elements")
 		}
@@ -2590,21 +2424,13 @@ func (ka *_List_IPLD__ReprKeyAssembler) AssignString(k string) error {
 		panic("misuse: KeyAssembler held beyond its valid lifetime")
 	}
 	switch k {
-	case "Tag":
-		if ka.s & fieldBit__List_IPLD_Tag != 0 {
-			return ipld.ErrRepeatedMapKey{Key: &fieldName__List_IPLD_Tag_serial}
-		}
-		ka.s += fieldBit__List_IPLD_Tag
-		ka.state = maState_expectValue
-		ka.f = 0
-		return nil
 	case "Elements":
 		if ka.s & fieldBit__List_IPLD_Elements != 0 {
 			return ipld.ErrRepeatedMapKey{Key: &fieldName__List_IPLD_Elements_serial}
 		}
 		ka.s += fieldBit__List_IPLD_Elements
 		ka.state = maState_expectValue
-		ka.f = 1
+		ka.f = 0
 		return nil
 	}
 	return ipld.ErrInvalidKey{TypeName:"ipld.List_IPLD.Repr", Key:&_String{k}}

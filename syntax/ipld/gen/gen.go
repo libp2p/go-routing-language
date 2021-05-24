@@ -56,7 +56,6 @@ func main() {
 
 	ts.Accumulate(schema.SpawnStruct("Dict_IPLD",
 		[]schema.StructField{
-			schema.SpawnStructField("Tag", "String", false, false),
 			schema.SpawnStructField("Pairs", "Pairs_IPLD", false, false),
 		},
 		schema.SpawnStructRepresentationMap(nil),
@@ -74,7 +73,6 @@ func main() {
 
 	ts.Accumulate(schema.SpawnStruct("List_IPLD",
 		[]schema.StructField{
-			schema.SpawnStructField("Tag", "String", false, false),
 			schema.SpawnStructField("Elements", "Nodes_IPLD", false, false),
 		},
 		schema.SpawnStructRepresentationMap(nil),

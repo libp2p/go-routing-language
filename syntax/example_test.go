@@ -8,7 +8,6 @@ import (
 
 func TestPretty(t *testing.T) {
 	n := Dict{
-		Tag: "foo",
 		Pairs: Pairs{
 			{String{"bar"}, String{"baz"}},
 			{String{"bar2"}, NewInt64(567)},

@@ -9,7 +9,6 @@ import (
 
 func TestMarshale2e(t *testing.T) {
 	n := Dict{
-		Tag: "foo",
 		Pairs: Pairs{
 			{String{"bar1"}, String{"baz"}},
 			{Int{big.NewInt(567)}, String{"baz"}},
@@ -17,7 +16,6 @@ func TestMarshale2e(t *testing.T) {
 			{String{"bar3"}, Bytes{[]byte("asdf")}},
 			{Bytes{[]byte("asdf")}, Int{big.NewInt(567)}},
 			{String{"bar4"}, Dict{
-				Tag: "foo2",
 				Pairs: Pairs{
 					{Bool{true}, Int{big.NewInt(567)}},
 				},
@@ -144,7 +142,6 @@ func TestMarshalNumber(t *testing.T) {
 
 func TestMarshalDict(t *testing.T) {
 	n := Dict{
-		Tag: "foo2",
 		Pairs: Pairs{
 			{Bool{true}, Int{big.NewInt(567)}},
 		},
@@ -169,7 +166,6 @@ func TestMarshalList(t *testing.T) {
 	n3 := Int{big.NewInt(567)}
 
 	n := List{
-		Tag:      "foo2",
 		Elements: []Node{n1, n2, n3},
 	}
 
@@ -187,9 +183,8 @@ func TestMarshalList(t *testing.T) {
 
 }
 
-func TestIPLDE2ESerialize(t *testing.T) {
+func TestIPLDSerializeRoundtrip(t *testing.T) {
 	n := Dict{
-		Tag: "foo",
 		Pairs: Pairs{
 			{String{"bar1"}, String{"baz"}},
 			{Int{big.NewInt(567)}, String{"baz"}},
@@ -197,7 +192,6 @@ func TestIPLDE2ESerialize(t *testing.T) {
 			{String{"bar3"}, Bytes{[]byte("asdf")}},
 			{Bytes{[]byte("asdf")}, Int{big.NewInt(567)}},
 			{String{"bar4"}, Dict{
-				Tag: "foo2",
 				Pairs: Pairs{
 					{Bool{true}, Int{big.NewInt(567)}},
 				},

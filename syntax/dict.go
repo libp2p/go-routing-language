@@ -59,7 +59,6 @@ func AreSamePairs(x, y Pairs) bool {
 
 // Dict is a set of uniquely-keyed values.
 type Dict struct {
-	Tag   string
 	Pairs Pairs // keys must be unique wrt IsEqual
 }
 
@@ -68,10 +67,7 @@ func (d Dict) Len() int {
 }
 
 func (d Dict) WritePretty(w io.Writer) error {
-	if _, err := w.Write([]byte(d.Tag)); err != nil {
-		return err
-	}
-	if _, err := w.Write([]byte{'('}); err != nil {
+	if _, err := w.Write([]byte{'{'}); err != nil {
 		return err
 	}
 	u := IndentWriter(w)
@@ -92,7 +88,7 @@ func (d Dict) WritePretty(w io.Writer) error {
 			}
 		}
 	}
-	if _, err := w.Write([]byte{')'}); err != nil {
+	if _, err := w.Write([]byte{'}'}); err != nil {
 		return err
 	}
 	return nil
@@ -103,15 +99,6 @@ func (d Dict) ToIPLD() (ipld.Node, error) {
 	// Initialize Dict
 	dbuild := xipld.Type.Dict_IPLD.NewBuilder()
 	ma, err := dbuild.BeginMap(-1)
-	if err != nil {
-		return nil, err
-	}
-	// Assign tag
-	tasm, err := ma.AssembleEntry("Tag")
-	if err != nil {
-		return nil, err
-	}
-	err = tasm.AssignString(d.Tag)
 	if err != nil {
 		return nil, err
 	}
@@ -217,12 +204,7 @@ func (d Dict) Get(key Node) Node {
 }
 
 func (d Dict) CopySet(key Node, value Node) Dict {
-	return d.CopySetTag(d.Tag, key, value)
-}
-
-func (d Dict) CopySetTag(tag string, key Node, value Node) Dict {
 	c := d.Copy()
-	c.Tag = tag
 	found := false
 	for i, p := range c.Pairs {
 		if IsEqual(key, p.Key) {
@@ -238,9 +220,6 @@ func (d Dict) CopySetTag(tag string, key Node, value Node) Dict {
 }
 
 func IsEqualDict(x, y Dict) bool {
-	if x.Tag != y.Tag {
-		return false
-	}
 	return AreSamePairs(x.Pairs, y.Pairs)
 }
 

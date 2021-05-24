@@ -58,7 +58,6 @@ type _Bytes_IPLD struct{ x []byte }
 // Dict_IPLD matches the IPLD Schema type "Dict_IPLD".  It has Struct type-kind, and may be interrogated like map kind.
 type Dict_IPLD = *_Dict_IPLD
 type _Dict_IPLD struct {
-	Tag _String
 	Pairs _Pairs_IPLD
 }
 
@@ -73,7 +72,6 @@ type _Int_IPLD struct{ x int64 }
 // List_IPLD matches the IPLD Schema type "List_IPLD".  It has Struct type-kind, and may be interrogated like map kind.
 type List_IPLD = *_List_IPLD
 type _List_IPLD struct {
-	Tag _String
 	Elements _Nodes_IPLD
 }
 

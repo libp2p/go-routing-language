@@ -91,7 +91,6 @@ func TestListIPLD(t *testing.T) {
 	n4 := Int{big.NewInt(567)}
 
 	b := List{
-		Tag:      "foo2",
 		Elements: []Node{n1, n2, n3, n4},
 	}
 	bi, err := b.ToIPLD()
@@ -109,7 +108,6 @@ func TestListIPLD(t *testing.T) {
 
 func TestDictIPLD(t *testing.T) {
 	b := Dict{
-		Tag: "foo2",
 		Pairs: Pairs{
 			{Bool{true}, Int{big.NewInt(567)}},
 		},
@@ -130,7 +128,6 @@ func TestDictIPLD(t *testing.T) {
 
 func TestCBORMarshalCBOR(t *testing.T) {
 	n := Dict{
-		Tag: "foo",
 		Pairs: Pairs{
 			{String{"bar1"}, String{"baz"}},
 			{Int{big.NewInt(567)}, String{"baz"}},
@@ -138,7 +135,6 @@ func TestCBORMarshalCBOR(t *testing.T) {
 			{String{"bar3"}, Bytes{[]byte("asdf")}},
 			{Bytes{[]byte("asdf")}, Int{big.NewInt(567)}},
 			{String{"bar4"}, Dict{
-				Tag: "foo2",
 				Pairs: Pairs{
 					{Bool{true}, Int{big.NewInt(567)}},
 				},
