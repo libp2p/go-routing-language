@@ -38,7 +38,6 @@ func TestMarshalJSONAll(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	println(string(b))
 	// Decode
 	out, err := UnmarshalJSON(b)
 	if err != nil {
