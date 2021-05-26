@@ -134,7 +134,7 @@ func (d Dict) WritePretty(w io.Writer) error {
 		return err
 	}
 	for i, p := range d.Pairs {
-		if err := p.WritePretty(u, ": "); err != nil {
+		if err := p.WritePretty(u, "="); err != nil {
 			return err
 		}
 		if i+1 == len(d.Pairs) {
