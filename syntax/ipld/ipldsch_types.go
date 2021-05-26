@@ -39,6 +39,8 @@ type typeSlab struct {
 	Pair_IPLD__Repr _Pair_IPLD__ReprPrototype
 	Pairs_IPLD       _Pairs_IPLD__Prototype
 	Pairs_IPLD__Repr _Pairs_IPLD__ReprPrototype
+	Predicate_IPLD       _Predicate_IPLD__Prototype
+	Predicate_IPLD__Repr _Predicate_IPLD__ReprPrototype
 	String       _String__Prototype
 	String__Repr _String__ReprPrototype
 	String_IPLD       _String_IPLD__Prototype
@@ -91,6 +93,7 @@ func (_Float_IPLD) _Node_IPLD__member() {}
 func (_Bool_IPLD) _Node_IPLD__member() {}
 func (_Dict_IPLD) _Node_IPLD__member() {}
 func (_List_IPLD) _Node_IPLD__member() {}
+func (_Predicate_IPLD) _Node_IPLD__member() {}
 
 // Nodes_IPLD matches the IPLD Schema type "Nodes_IPLD".  It has list kind.
 type Nodes_IPLD = *_Nodes_IPLD
@@ -109,6 +112,14 @@ type _Pair_IPLD struct {
 type Pairs_IPLD = *_Pairs_IPLD
 type _Pairs_IPLD struct {
 	x []_Pair_IPLD
+}
+
+// Predicate_IPLD matches the IPLD Schema type "Predicate_IPLD".  It has Struct type-kind, and may be interrogated like map kind.
+type Predicate_IPLD = *_Predicate_IPLD
+type _Predicate_IPLD struct {
+	Tag _String
+	Positional _Nodes_IPLD
+	Named _Pairs_IPLD
 }
 
 // String matches the IPLD Schema type "String".  It has string kind.

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestMarshale2e(t *testing.T) {
+func TestMarshalJSONAll(t *testing.T) {
 	n := Dict{
 		Pairs: Pairs{
 			{String{"bar1"}, String{"baz"}},
@@ -20,6 +20,16 @@ func TestMarshale2e(t *testing.T) {
 					{Bool{true}, Int{big.NewInt(567)}},
 				},
 			}},
+			{String{"predicate"}, Predicate{
+				Tag: "tag",
+				Positional: Nodes{
+					Bool{true},
+					Int{big.NewInt(567)},
+				},
+				Named: Pairs{
+					{Bool{true}, Int{big.NewInt(567)}},
+				},
+			}},
 		},
 	}
 
@@ -28,6 +38,7 @@ func TestMarshale2e(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	println(string(b))
 	// Decode
 	out, err := UnmarshalJSON(b)
 	if err != nil {
@@ -45,11 +56,11 @@ func TestMarshale2e(t *testing.T) {
 		w.Reset()
 		out.WritePretty(&w)
 		fmt.Println(w.String())
-		t.Fatal("Error unmarshalling Dict")
+		t.Fatal("error unmarshalling Dict")
 	}
 }
 
-func TestMarshalString(t *testing.T) {
+func TestMarshalJSONString(t *testing.T) {
 	n := String{"testing!"}
 	b, err := MarshalJSON(n)
 	if err != nil {
@@ -61,11 +72,11 @@ func TestMarshalString(t *testing.T) {
 	}
 
 	if !IsEqual(n, o) {
-		t.Fatal("Error unmarshalling string", n, o)
+		t.Fatal("error unmarshalling string", n, o)
 	}
 }
 
-func TestMarshalBool(t *testing.T) {
+func TestMarshalJSONBool(t *testing.T) {
 	n := Bool{true}
 	b, err := MarshalJSON(n)
 	if err != nil {
@@ -76,7 +87,7 @@ func TestMarshalBool(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !IsEqual(n, o) {
-		t.Fatal("Error unmarshalling string", n, o)
+		t.Fatal("error unmarshalling string", n, o)
 	}
 
 	n = Bool{false}
@@ -89,11 +100,11 @@ func TestMarshalBool(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !IsEqual(n, o) {
-		t.Fatal("Error unmarshalling string", n, o)
+		t.Fatal("error unmarshalling string", n, o)
 	}
 }
 
-func TestMarshalBytes(t *testing.T) {
+func TestMarshalJSONBytes(t *testing.T) {
 	n := Bytes{[]byte("testing!")}
 	b, err := MarshalJSON(n)
 	if err != nil {
@@ -104,11 +115,11 @@ func TestMarshalBytes(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !IsEqual(n, o) {
-		t.Fatal("Error unmarshalling blob", n, o)
+		t.Fatal("error unmarshalling blob", n, o)
 	}
 }
 
-func TestMarshalNumber(t *testing.T) {
+func TestMarshalJSONNumber(t *testing.T) {
 	n := Int{big.NewInt(123)}
 	b, err := MarshalJSON(n)
 	if err != nil {
@@ -119,7 +130,7 @@ func TestMarshalNumber(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !IsEqual(n, o) {
-		t.Fatal("Error unmarshalling Int", n, o)
+		t.Fatal("error unmarshalling Int", n, o)
 	}
 
 	// We must use 64 precision to perform the right comparison.
@@ -135,12 +146,12 @@ func TestMarshalNumber(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !IsEqual(f, of) {
-		t.Fatal("Error unmarshalling Float", f, of)
+		t.Fatal("error unmarshalling Float", f, of)
 	}
 
 }
 
-func TestMarshalDict(t *testing.T) {
+func TestMarshalJSONDict(t *testing.T) {
 	n := Dict{
 		Pairs: Pairs{
 			{Bool{true}, Int{big.NewInt(567)}},
@@ -155,12 +166,12 @@ func TestMarshalDict(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !IsEqual(n, out) {
-		t.Fatal("Error unmarshalling Dict")
+		t.Fatal("error unmarshalling Dict")
 	}
 
 }
 
-func TestMarshalList(t *testing.T) {
+func TestMarshalJSONList(t *testing.T) {
 	n1 := Bool{true}
 	n2 := String{"testing!"}
 	n3 := Int{big.NewInt(567)}
@@ -178,21 +189,31 @@ func TestMarshalList(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !IsEqual(n, out) {
-		t.Fatal("Error unmarshalling List")
+		t.Fatal("error unmarshalling List")
 	}
 
 }
 
-func TestIPLDSerializeRoundtrip(t *testing.T) {
+func TestMarshalCBORAll(t *testing.T) {
 	n := Dict{
 		Pairs: Pairs{
-			{String{"bar1"}, String{"baz"}},
+			{String{"string"}, String{"baz"}},
 			{Int{big.NewInt(567)}, String{"baz"}},
-			{String{"bar2"}, Int{big.NewInt(567)}},
-			{String{"bar3"}, Bytes{[]byte("asdf")}},
-			{Bytes{[]byte("asdf")}, Int{big.NewInt(567)}},
-			{String{"bar4"}, Dict{
+			{String{"int1"}, Int{big.NewInt(567)}},
+			{String{"bytes"}, Bytes{[]byte("asdf")}},
+			{Bytes{[]byte("int2")}, Int{big.NewInt(567)}},
+			{String{"dict"}, Dict{
 				Pairs: Pairs{
+					{Bool{true}, Int{big.NewInt(567)}},
+				},
+			}},
+			{String{"predicate"}, Predicate{
+				Tag: "tag",
+				Positional: Nodes{
+					Bool{true},
+					Int{big.NewInt(567)},
+				},
+				Named: Pairs{
 					{Bool{true}, Int{big.NewInt(567)}},
 				},
 			}},
@@ -207,6 +228,6 @@ func TestIPLDSerializeRoundtrip(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !IsEqual(n, out) {
-		t.Fatal("Error CBOR decoding using IPLD encoders", n, out)
+		t.Fatal("error CBOR decoding using IPLD encoders", n, out)
 	}
 }

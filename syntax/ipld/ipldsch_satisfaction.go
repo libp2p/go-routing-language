@@ -2496,6 +2496,7 @@ var (
 	memberName__Node_IPLD_Bool_IPLD = _String{"Bool_IPLD"}
 	memberName__Node_IPLD_Dict_IPLD = _String{"Dict_IPLD"}
 	memberName__Node_IPLD_List_IPLD = _String{"List_IPLD"}
+	memberName__Node_IPLD_Predicate_IPLD = _String{"Predicate_IPLD"}
 )
 var _ ipld.Node = (Node_IPLD)(&_Node_IPLD{})
 var _ schema.TypedNode = (Node_IPLD)(&_Node_IPLD{})
@@ -2546,6 +2547,12 @@ func (n Node_IPLD) LookupByString(key string) (ipld.Node, error) {
 		} else {
 			return nil, ipld.ErrNotExists{Segment: ipld.PathSegmentOfString(key)}
 		}
+	case "Predicate_IPLD":
+		if n2, ok := n.x.(Predicate_IPLD); ok {
+			return n2, nil
+		} else {
+			return nil, ipld.ErrNotExists{Segment: ipld.PathSegmentOfString(key)}
+		}
 	default:
 		return nil, schema.ErrNoSuchField{Type: nil /*TODO*/, Field: ipld.PathSegmentOfString(key)}
 	}
@@ -2591,6 +2598,8 @@ func (itr *_Node_IPLD__MapItr) Next() (k ipld.Node, v ipld.Node, _ error) {
 		k, v = &memberName__Node_IPLD_Dict_IPLD, n2
 	case List_IPLD:
 		k, v = &memberName__Node_IPLD_List_IPLD, n2
+	case Predicate_IPLD:
+		k, v = &memberName__Node_IPLD_Predicate_IPLD, n2
 	default:
 		panic("unreachable")
 	}
@@ -2674,6 +2683,8 @@ type _Node_IPLD__Assembler struct {
 	ca6 *_Dict_IPLD__Assembler
 	
 	ca7 *_List_IPLD__Assembler
+	
+	ca8 *_Predicate_IPLD__Assembler
 	ca uint
 }
 func (na *_Node_IPLD__Assembler) reset() {
@@ -2701,6 +2712,9 @@ func (na *_Node_IPLD__Assembler) reset() {
 	
 	case 7:
 		na.ca7.reset()
+	
+	case 8:
+		na.ca8.reset()
 	default:
 		panic("unreachable")
 	}
@@ -2900,6 +2914,17 @@ func (ma *_Node_IPLD__Assembler) AssembleEntry(k string) (ipld.NodeAssembler, er
 		ma.ca7.w = x
 		ma.ca7.m = &ma.cm
 		return ma.ca7, nil
+	case "Predicate_IPLD":
+		ma.state = maState_midValue
+		ma.ca = 8
+		x := &_Predicate_IPLD{}
+		ma.w.x = x
+		if ma.ca8 == nil {
+			ma.ca8 = &_Predicate_IPLD__Assembler{}
+		}
+		ma.ca8.w = x
+		ma.ca8.m = &ma.cm
+		return ma.ca8, nil
 	}
 	return nil, ipld.ErrInvalidKey{TypeName:"ipld.Node_IPLD", Key:&_String{k}}
 }
@@ -2999,6 +3024,15 @@ func (ma *_Node_IPLD__Assembler) AssembleValue() ipld.NodeAssembler {
 		ma.ca7.w = x
 		ma.ca7.m = &ma.cm
 		return ma.ca7
+	case 7:
+		x := &_Predicate_IPLD{}
+		ma.w.x = x
+		if ma.ca8 == nil {
+			ma.ca8 = &_Predicate_IPLD__Assembler{}
+		}
+		ma.ca8.w = x
+		ma.ca8.m = &ma.cm
+		return ma.ca8
 	default:
 		panic("unreachable")
 	}
@@ -3044,6 +3078,8 @@ func (ma *_Node_IPLD__Assembler) ValuePrototype(k string) ipld.NodePrototype {
 		return _Dict_IPLD__Prototype{}
 	case "List_IPLD":
 		return _List_IPLD__Prototype{}
+	case "Predicate_IPLD":
+		return _Predicate_IPLD__Prototype{}
 	default:
 		return nil
 	}
@@ -3103,6 +3139,10 @@ func (ka *_Node_IPLD__KeyAssembler) AssignString(k string) error {
 		ka.ca = 7
 		ka.state = maState_expectValue
 		return nil
+	case "Predicate_IPLD":
+		ka.ca = 8
+		ka.state = maState_expectValue
+		return nil
 	}
 	return ipld.ErrInvalidKey{TypeName:"ipld.Node_IPLD", Key:&_String{k}} // TODO: error quality: ErrInvalidUnionDiscriminant ?
 }
@@ -3137,6 +3177,7 @@ var (
 	memberName__Node_IPLD_Bool_IPLD_serial = _String{"Bool"}
 	memberName__Node_IPLD_Dict_IPLD_serial = _String{"Dict"}
 	memberName__Node_IPLD_List_IPLD_serial = _String{"List"}
+	memberName__Node_IPLD_Predicate_IPLD_serial = _String{"Predicate"}
 )
 var _ ipld.Node = &_Node_IPLD__Repr{}
 func (_Node_IPLD__Repr) Kind() ipld.Kind {
@@ -3186,6 +3227,12 @@ func (n *_Node_IPLD__Repr) LookupByString(key string) (ipld.Node, error) {
 		} else {
 			return nil, ipld.ErrNotExists{Segment: ipld.PathSegmentOfString(key)}
 		}
+	case "Predicate":
+		if n2, ok := n.x.(Predicate_IPLD); ok {
+			return n2.Representation(), nil
+		} else {
+			return nil, ipld.ErrNotExists{Segment: ipld.PathSegmentOfString(key)}
+		}
 	default:
 		return nil, schema.ErrNoSuchField{Type: nil /*TODO*/, Field: ipld.PathSegmentOfString(key)}
 	}
@@ -3231,6 +3278,8 @@ func (itr *_Node_IPLD__ReprMapItr) Next() (k ipld.Node, v ipld.Node, _ error) {
 		k, v = &memberName__Node_IPLD_Dict_IPLD_serial, n2.Representation()
 	case List_IPLD:
 		k, v = &memberName__Node_IPLD_List_IPLD_serial, n2.Representation()
+	case Predicate_IPLD:
+		k, v = &memberName__Node_IPLD_Predicate_IPLD_serial, n2.Representation()
 	default:
 		panic("unreachable")
 	}
@@ -3314,6 +3363,8 @@ type _Node_IPLD__ReprAssembler struct {
 	ca6 *_Dict_IPLD__ReprAssembler
 	
 	ca7 *_List_IPLD__ReprAssembler
+	
+	ca8 *_Predicate_IPLD__ReprAssembler
 	ca uint
 }
 func (na *_Node_IPLD__ReprAssembler) reset() {
@@ -3341,6 +3392,9 @@ func (na *_Node_IPLD__ReprAssembler) reset() {
 	
 	case 7:
 		na.ca7.reset()
+	
+	case 8:
+		na.ca8.reset()
 	default:
 		panic("unreachable")
 	}
@@ -3540,6 +3594,17 @@ func (ma *_Node_IPLD__ReprAssembler) AssembleEntry(k string) (ipld.NodeAssembler
 		ma.ca7.w = x
 		ma.ca7.m = &ma.cm
 		return ma.ca7, nil
+	case "Predicate":
+		ma.state = maState_midValue
+		ma.ca = 8
+		x := &_Predicate_IPLD{}
+		ma.w.x = x
+		if ma.ca8 == nil {
+			ma.ca8 = &_Predicate_IPLD__ReprAssembler{}
+		}
+		ma.ca8.w = x
+		ma.ca8.m = &ma.cm
+		return ma.ca8, nil
 	}
 	return nil, ipld.ErrInvalidKey{TypeName:"ipld.Node_IPLD.Repr", Key:&_String{k}}
 }
@@ -3639,6 +3704,15 @@ func (ma *_Node_IPLD__ReprAssembler) AssembleValue() ipld.NodeAssembler {
 		ma.ca7.w = x
 		ma.ca7.m = &ma.cm
 		return ma.ca7
+	case 7:
+		x := &_Predicate_IPLD{}
+		ma.w.x = x
+		if ma.ca8 == nil {
+			ma.ca8 = &_Predicate_IPLD__ReprAssembler{}
+		}
+		ma.ca8.w = x
+		ma.ca8.m = &ma.cm
+		return ma.ca8
 	default:
 		panic("unreachable")
 	}
@@ -3684,6 +3758,8 @@ func (ma *_Node_IPLD__ReprAssembler) ValuePrototype(k string) ipld.NodePrototype
 		return _Dict_IPLD__ReprPrototype{}
 	case "List_IPLD":
 		return _List_IPLD__ReprPrototype{}
+	case "Predicate_IPLD":
+		return _Predicate_IPLD__ReprPrototype{}
 	default:
 		return nil
 	}
@@ -3741,6 +3817,10 @@ func (ka *_Node_IPLD__ReprKeyAssembler) AssignString(k string) error {
 		return nil
 	case "List":
 		ka.ca = 7
+		ka.state = maState_expectValue
+		return nil
+	case "Predicate":
+		ka.ca = 8
 		ka.state = maState_expectValue
 		return nil
 	}
@@ -5850,6 +5930,996 @@ func (la *_Pairs_IPLD__ReprAssembler) Finish() error {
 }
 func (la *_Pairs_IPLD__ReprAssembler) ValuePrototype(_ int64) ipld.NodePrototype {
 	return _Pair_IPLD__ReprPrototype{}
+}
+
+
+func (n _Predicate_IPLD) FieldTag() String {
+	return &n.Tag
+}
+func (n _Predicate_IPLD) FieldPositional() Nodes_IPLD {
+	return &n.Positional
+}
+func (n _Predicate_IPLD) FieldNamed() Pairs_IPLD {
+	return &n.Named
+}
+type _Predicate_IPLD__Maybe struct {
+	m schema.Maybe
+	v Predicate_IPLD
+}
+type MaybePredicate_IPLD = *_Predicate_IPLD__Maybe
+
+func (m MaybePredicate_IPLD) IsNull() bool {
+	return m.m == schema.Maybe_Null
+}
+func (m MaybePredicate_IPLD) IsAbsent() bool {
+	return m.m == schema.Maybe_Absent
+}
+func (m MaybePredicate_IPLD) Exists() bool {
+	return m.m == schema.Maybe_Value
+}
+func (m MaybePredicate_IPLD) AsNode() ipld.Node {
+	switch m.m {
+		case schema.Maybe_Absent:
+			return ipld.Absent
+		case schema.Maybe_Null:
+			return ipld.Null
+		case schema.Maybe_Value:
+			return m.v
+		default:
+			panic("unreachable")
+	}
+}
+func (m MaybePredicate_IPLD) Must() Predicate_IPLD {
+	if !m.Exists() {
+		panic("unbox of a maybe rejected")
+	}
+	return m.v
+}
+var (
+	fieldName__Predicate_IPLD_Tag = _String{"Tag"}
+	fieldName__Predicate_IPLD_Positional = _String{"Positional"}
+	fieldName__Predicate_IPLD_Named = _String{"Named"}
+)
+var _ ipld.Node = (Predicate_IPLD)(&_Predicate_IPLD{})
+var _ schema.TypedNode = (Predicate_IPLD)(&_Predicate_IPLD{})
+func (Predicate_IPLD) Kind() ipld.Kind {
+	return ipld.Kind_Map
+}
+func (n Predicate_IPLD) LookupByString(key string) (ipld.Node, error) {
+	switch key {
+	case "Tag":
+		return &n.Tag, nil
+	case "Positional":
+		return &n.Positional, nil
+	case "Named":
+		return &n.Named, nil
+	default:
+		return nil, schema.ErrNoSuchField{Type: nil /*TODO*/, Field: ipld.PathSegmentOfString(key)}
+	}
+}
+func (n Predicate_IPLD) LookupByNode(key ipld.Node) (ipld.Node, error) {
+	ks, err := key.AsString()
+	if err != nil {
+		return nil, err
+	}
+	return n.LookupByString(ks)
+}
+func (Predicate_IPLD) LookupByIndex(idx int64) (ipld.Node, error) {
+	return mixins.Map{"ipld.Predicate_IPLD"}.LookupByIndex(0)
+}
+func (n Predicate_IPLD) LookupBySegment(seg ipld.PathSegment) (ipld.Node, error) {
+	return n.LookupByString(seg.String())
+}
+func (n Predicate_IPLD) MapIterator() ipld.MapIterator {
+	return &_Predicate_IPLD__MapItr{n, 0}
+}
+
+type _Predicate_IPLD__MapItr struct {
+	n Predicate_IPLD
+	idx  int
+}
+
+func (itr *_Predicate_IPLD__MapItr) Next() (k ipld.Node, v ipld.Node, _ error) {if itr.idx >= 3 {
+		return nil, nil, ipld.ErrIteratorOverread{}
+	}
+	switch itr.idx {
+	case 0:
+		k = &fieldName__Predicate_IPLD_Tag
+		v = &itr.n.Tag
+	case 1:
+		k = &fieldName__Predicate_IPLD_Positional
+		v = &itr.n.Positional
+	case 2:
+		k = &fieldName__Predicate_IPLD_Named
+		v = &itr.n.Named
+	default:
+		panic("unreachable")
+	}
+	itr.idx++
+	return
+}
+func (itr *_Predicate_IPLD__MapItr) Done() bool {
+	return itr.idx >= 3
+}
+
+func (Predicate_IPLD) ListIterator() ipld.ListIterator {
+	return nil
+}
+func (Predicate_IPLD) Length() int64 {
+	return 3
+}
+func (Predicate_IPLD) IsAbsent() bool {
+	return false
+}
+func (Predicate_IPLD) IsNull() bool {
+	return false
+}
+func (Predicate_IPLD) AsBool() (bool, error) {
+	return mixins.Map{"ipld.Predicate_IPLD"}.AsBool()
+}
+func (Predicate_IPLD) AsInt() (int64, error) {
+	return mixins.Map{"ipld.Predicate_IPLD"}.AsInt()
+}
+func (Predicate_IPLD) AsFloat() (float64, error) {
+	return mixins.Map{"ipld.Predicate_IPLD"}.AsFloat()
+}
+func (Predicate_IPLD) AsString() (string, error) {
+	return mixins.Map{"ipld.Predicate_IPLD"}.AsString()
+}
+func (Predicate_IPLD) AsBytes() ([]byte, error) {
+	return mixins.Map{"ipld.Predicate_IPLD"}.AsBytes()
+}
+func (Predicate_IPLD) AsLink() (ipld.Link, error) {
+	return mixins.Map{"ipld.Predicate_IPLD"}.AsLink()
+}
+func (Predicate_IPLD) Prototype() ipld.NodePrototype {
+	return _Predicate_IPLD__Prototype{}
+}
+type _Predicate_IPLD__Prototype struct{}
+
+func (_Predicate_IPLD__Prototype) NewBuilder() ipld.NodeBuilder {
+	var nb _Predicate_IPLD__Builder
+	nb.Reset()
+	return &nb
+}
+type _Predicate_IPLD__Builder struct {
+	_Predicate_IPLD__Assembler
+}
+func (nb *_Predicate_IPLD__Builder) Build() ipld.Node {
+	if *nb.m != schema.Maybe_Value {
+		panic("invalid state: cannot call Build on an assembler that's not finished")
+	}
+	return nb.w
+}
+func (nb *_Predicate_IPLD__Builder) Reset() {
+	var w _Predicate_IPLD
+	var m schema.Maybe
+	*nb = _Predicate_IPLD__Builder{_Predicate_IPLD__Assembler{w: &w, m: &m}}
+}
+type _Predicate_IPLD__Assembler struct {
+	w *_Predicate_IPLD
+	m *schema.Maybe
+	state maState
+	s int
+	f int
+
+	cm schema.Maybe
+	ca_Tag _String__Assembler
+	ca_Positional _Nodes_IPLD__Assembler
+	ca_Named _Pairs_IPLD__Assembler
+	}
+
+func (na *_Predicate_IPLD__Assembler) reset() {
+	na.state = maState_initial
+	na.s = 0
+	na.ca_Tag.reset()
+	na.ca_Positional.reset()
+	na.ca_Named.reset()
+}
+
+var (
+	fieldBit__Predicate_IPLD_Tag = 1 << 0
+	fieldBit__Predicate_IPLD_Positional = 1 << 1
+	fieldBit__Predicate_IPLD_Named = 1 << 2
+	fieldBits__Predicate_IPLD_sufficient = 0 + 1 << 0 + 1 << 1 + 1 << 2
+)
+func (na *_Predicate_IPLD__Assembler) BeginMap(int64) (ipld.MapAssembler, error) {
+	switch *na.m {
+	case schema.Maybe_Value, schema.Maybe_Null:
+		panic("invalid state: cannot assign into assembler that's already finished")
+	case midvalue:
+		panic("invalid state: it makes no sense to 'begin' twice on the same assembler!")
+	}
+	*na.m = midvalue
+	if na.w == nil {
+		na.w = &_Predicate_IPLD{}
+	}
+	return na, nil
+}
+func (_Predicate_IPLD__Assembler) BeginList(sizeHint int64) (ipld.ListAssembler, error) {
+	return mixins.MapAssembler{"ipld.Predicate_IPLD"}.BeginList(0)
+}
+func (na *_Predicate_IPLD__Assembler) AssignNull() error {
+	switch *na.m {
+	case allowNull:
+		*na.m = schema.Maybe_Null
+		return nil
+	case schema.Maybe_Absent:
+		return mixins.MapAssembler{"ipld.Predicate_IPLD"}.AssignNull()
+	case schema.Maybe_Value, schema.Maybe_Null:
+		panic("invalid state: cannot assign into assembler that's already finished")
+	case midvalue:
+		panic("invalid state: cannot assign null into an assembler that's already begun working on recursive structures!")
+	}
+	panic("unreachable")
+}
+func (_Predicate_IPLD__Assembler) AssignBool(bool) error {
+	return mixins.MapAssembler{"ipld.Predicate_IPLD"}.AssignBool(false)
+}
+func (_Predicate_IPLD__Assembler) AssignInt(int64) error {
+	return mixins.MapAssembler{"ipld.Predicate_IPLD"}.AssignInt(0)
+}
+func (_Predicate_IPLD__Assembler) AssignFloat(float64) error {
+	return mixins.MapAssembler{"ipld.Predicate_IPLD"}.AssignFloat(0)
+}
+func (_Predicate_IPLD__Assembler) AssignString(string) error {
+	return mixins.MapAssembler{"ipld.Predicate_IPLD"}.AssignString("")
+}
+func (_Predicate_IPLD__Assembler) AssignBytes([]byte) error {
+	return mixins.MapAssembler{"ipld.Predicate_IPLD"}.AssignBytes(nil)
+}
+func (_Predicate_IPLD__Assembler) AssignLink(ipld.Link) error {
+	return mixins.MapAssembler{"ipld.Predicate_IPLD"}.AssignLink(nil)
+}
+func (na *_Predicate_IPLD__Assembler) AssignNode(v ipld.Node) error {
+	if v.IsNull() {
+		return na.AssignNull()
+	}
+	if v2, ok := v.(*_Predicate_IPLD); ok {
+		switch *na.m {
+		case schema.Maybe_Value, schema.Maybe_Null:
+			panic("invalid state: cannot assign into assembler that's already finished")
+		case midvalue:
+			panic("invalid state: cannot assign null into an assembler that's already begun working on recursive structures!")
+		}
+		if na.w == nil {
+			na.w = v2
+			*na.m = schema.Maybe_Value
+			return nil
+		}
+		*na.w = *v2
+		*na.m = schema.Maybe_Value
+		return nil
+	}
+	if v.Kind() != ipld.Kind_Map {
+		return ipld.ErrWrongKind{TypeName: "ipld.Predicate_IPLD", MethodName: "AssignNode", AppropriateKind: ipld.KindSet_JustMap, ActualKind: v.Kind()}
+	}
+	itr := v.MapIterator()
+	for !itr.Done() {
+		k, v, err := itr.Next()
+		if err != nil {
+			return err
+		}
+		if err := na.AssembleKey().AssignNode(k); err != nil {
+			return err
+		}
+		if err := na.AssembleValue().AssignNode(v); err != nil {
+			return err
+		}
+	}
+	return na.Finish()
+}
+func (_Predicate_IPLD__Assembler) Prototype() ipld.NodePrototype {
+	return _Predicate_IPLD__Prototype{}
+}
+func (ma *_Predicate_IPLD__Assembler) valueFinishTidy() bool {
+	switch ma.f {
+	case 0:
+		switch ma.cm {
+		case schema.Maybe_Value:
+			ma.ca_Tag.w = nil
+			ma.cm = schema.Maybe_Absent
+			ma.state = maState_initial
+			return true
+		default:
+			return false
+		}
+	case 1:
+		switch ma.cm {
+		case schema.Maybe_Value:
+			ma.ca_Positional.w = nil
+			ma.cm = schema.Maybe_Absent
+			ma.state = maState_initial
+			return true
+		default:
+			return false
+		}
+	case 2:
+		switch ma.cm {
+		case schema.Maybe_Value:
+			ma.ca_Named.w = nil
+			ma.cm = schema.Maybe_Absent
+			ma.state = maState_initial
+			return true
+		default:
+			return false
+		}
+	default:
+		panic("unreachable")
+	}
+}
+func (ma *_Predicate_IPLD__Assembler) AssembleEntry(k string) (ipld.NodeAssembler, error) {
+	switch ma.state {
+	case maState_initial:
+		// carry on
+	case maState_midKey:
+		panic("invalid state: AssembleEntry cannot be called when in the middle of assembling another key")
+	case maState_expectValue:
+		panic("invalid state: AssembleEntry cannot be called when expecting start of value assembly")
+	case maState_midValue:
+		if !ma.valueFinishTidy() {
+			panic("invalid state: AssembleEntry cannot be called when in the middle of assembling a value")
+		} // if tidy success: carry on
+	case maState_finished:
+		panic("invalid state: AssembleEntry cannot be called on an assembler that's already finished")
+	}
+	switch k {
+	case "Tag":
+		if ma.s & fieldBit__Predicate_IPLD_Tag != 0 {
+			return nil, ipld.ErrRepeatedMapKey{Key: &fieldName__Predicate_IPLD_Tag}
+		}
+		ma.s += fieldBit__Predicate_IPLD_Tag
+		ma.state = maState_midValue
+		ma.f = 0
+		ma.ca_Tag.w = &ma.w.Tag
+		ma.ca_Tag.m = &ma.cm
+		return &ma.ca_Tag, nil
+	case "Positional":
+		if ma.s & fieldBit__Predicate_IPLD_Positional != 0 {
+			return nil, ipld.ErrRepeatedMapKey{Key: &fieldName__Predicate_IPLD_Positional}
+		}
+		ma.s += fieldBit__Predicate_IPLD_Positional
+		ma.state = maState_midValue
+		ma.f = 1
+		ma.ca_Positional.w = &ma.w.Positional
+		ma.ca_Positional.m = &ma.cm
+		return &ma.ca_Positional, nil
+	case "Named":
+		if ma.s & fieldBit__Predicate_IPLD_Named != 0 {
+			return nil, ipld.ErrRepeatedMapKey{Key: &fieldName__Predicate_IPLD_Named}
+		}
+		ma.s += fieldBit__Predicate_IPLD_Named
+		ma.state = maState_midValue
+		ma.f = 2
+		ma.ca_Named.w = &ma.w.Named
+		ma.ca_Named.m = &ma.cm
+		return &ma.ca_Named, nil
+	}
+	return nil, ipld.ErrInvalidKey{TypeName:"ipld.Predicate_IPLD", Key:&_String{k}}
+}
+func (ma *_Predicate_IPLD__Assembler) AssembleKey() ipld.NodeAssembler {
+	switch ma.state {
+	case maState_initial:
+		// carry on
+	case maState_midKey:
+		panic("invalid state: AssembleKey cannot be called when in the middle of assembling another key")
+	case maState_expectValue:
+		panic("invalid state: AssembleKey cannot be called when expecting start of value assembly")
+	case maState_midValue:
+		if !ma.valueFinishTidy() {
+			panic("invalid state: AssembleKey cannot be called when in the middle of assembling a value")
+		} // if tidy success: carry on
+	case maState_finished:
+		panic("invalid state: AssembleKey cannot be called on an assembler that's already finished")
+	}
+	ma.state = maState_midKey
+	return (*_Predicate_IPLD__KeyAssembler)(ma)
+}
+func (ma *_Predicate_IPLD__Assembler) AssembleValue() ipld.NodeAssembler {
+	switch ma.state {
+	case maState_initial:
+		panic("invalid state: AssembleValue cannot be called when no key is primed")
+	case maState_midKey:
+		panic("invalid state: AssembleValue cannot be called when in the middle of assembling a key")
+	case maState_expectValue:
+		// carry on
+	case maState_midValue:
+		panic("invalid state: AssembleValue cannot be called when in the middle of assembling another value")
+	case maState_finished:
+		panic("invalid state: AssembleValue cannot be called on an assembler that's already finished")
+	}
+	ma.state = maState_midValue
+	switch ma.f {
+	case 0:
+		ma.ca_Tag.w = &ma.w.Tag
+		ma.ca_Tag.m = &ma.cm
+		return &ma.ca_Tag
+	case 1:
+		ma.ca_Positional.w = &ma.w.Positional
+		ma.ca_Positional.m = &ma.cm
+		return &ma.ca_Positional
+	case 2:
+		ma.ca_Named.w = &ma.w.Named
+		ma.ca_Named.m = &ma.cm
+		return &ma.ca_Named
+	default:
+		panic("unreachable")
+	}
+}
+func (ma *_Predicate_IPLD__Assembler) Finish() error {
+	switch ma.state {
+	case maState_initial:
+		// carry on
+	case maState_midKey:
+		panic("invalid state: Finish cannot be called when in the middle of assembling a key")
+	case maState_expectValue:
+		panic("invalid state: Finish cannot be called when expecting start of value assembly")
+	case maState_midValue:
+		if !ma.valueFinishTidy() {
+			panic("invalid state: Finish cannot be called when in the middle of assembling a value")
+		} // if tidy success: carry on
+	case maState_finished:
+		panic("invalid state: Finish cannot be called on an assembler that's already finished")
+	}
+	if ma.s & fieldBits__Predicate_IPLD_sufficient != fieldBits__Predicate_IPLD_sufficient {
+		err := ipld.ErrMissingRequiredField{Missing: make([]string, 0)}
+		if ma.s & fieldBit__Predicate_IPLD_Tag == 0 {
+			err.Missing = append(err.Missing, "Tag")
+		}
+		if ma.s & fieldBit__Predicate_IPLD_Positional == 0 {
+			err.Missing = append(err.Missing, "Positional")
+		}
+		if ma.s & fieldBit__Predicate_IPLD_Named == 0 {
+			err.Missing = append(err.Missing, "Named")
+		}
+		return err
+	}
+	ma.state = maState_finished
+	*ma.m = schema.Maybe_Value
+	return nil
+}
+func (ma *_Predicate_IPLD__Assembler) KeyPrototype() ipld.NodePrototype {
+	return _String__Prototype{}
+}
+func (ma *_Predicate_IPLD__Assembler) ValuePrototype(k string) ipld.NodePrototype {
+	panic("todo structbuilder mapassembler valueprototype")
+}
+type _Predicate_IPLD__KeyAssembler _Predicate_IPLD__Assembler
+func (_Predicate_IPLD__KeyAssembler) BeginMap(sizeHint int64) (ipld.MapAssembler, error) {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.KeyAssembler"}.BeginMap(0)
+}
+func (_Predicate_IPLD__KeyAssembler) BeginList(sizeHint int64) (ipld.ListAssembler, error) {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.KeyAssembler"}.BeginList(0)
+}
+func (na *_Predicate_IPLD__KeyAssembler) AssignNull() error {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.KeyAssembler"}.AssignNull()
+}
+func (_Predicate_IPLD__KeyAssembler) AssignBool(bool) error {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.KeyAssembler"}.AssignBool(false)
+}
+func (_Predicate_IPLD__KeyAssembler) AssignInt(int64) error {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.KeyAssembler"}.AssignInt(0)
+}
+func (_Predicate_IPLD__KeyAssembler) AssignFloat(float64) error {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.KeyAssembler"}.AssignFloat(0)
+}
+func (ka *_Predicate_IPLD__KeyAssembler) AssignString(k string) error {
+	if ka.state != maState_midKey {
+		panic("misuse: KeyAssembler held beyond its valid lifetime")
+	}
+	switch k {
+	case "Tag":
+		if ka.s & fieldBit__Predicate_IPLD_Tag != 0 {
+			return ipld.ErrRepeatedMapKey{Key: &fieldName__Predicate_IPLD_Tag}
+		}
+		ka.s += fieldBit__Predicate_IPLD_Tag
+		ka.state = maState_expectValue
+		ka.f = 0
+	case "Positional":
+		if ka.s & fieldBit__Predicate_IPLD_Positional != 0 {
+			return ipld.ErrRepeatedMapKey{Key: &fieldName__Predicate_IPLD_Positional}
+		}
+		ka.s += fieldBit__Predicate_IPLD_Positional
+		ka.state = maState_expectValue
+		ka.f = 1
+	case "Named":
+		if ka.s & fieldBit__Predicate_IPLD_Named != 0 {
+			return ipld.ErrRepeatedMapKey{Key: &fieldName__Predicate_IPLD_Named}
+		}
+		ka.s += fieldBit__Predicate_IPLD_Named
+		ka.state = maState_expectValue
+		ka.f = 2
+	default:
+		return ipld.ErrInvalidKey{TypeName:"ipld.Predicate_IPLD", Key:&_String{k}}
+	}
+	return nil
+}
+func (_Predicate_IPLD__KeyAssembler) AssignBytes([]byte) error {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.KeyAssembler"}.AssignBytes(nil)
+}
+func (_Predicate_IPLD__KeyAssembler) AssignLink(ipld.Link) error {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.KeyAssembler"}.AssignLink(nil)
+}
+func (ka *_Predicate_IPLD__KeyAssembler) AssignNode(v ipld.Node) error {
+	if v2, err := v.AsString(); err != nil {
+		return err
+	} else {
+		return ka.AssignString(v2)
+	}
+}
+func (_Predicate_IPLD__KeyAssembler) Prototype() ipld.NodePrototype {
+	return _String__Prototype{}
+}
+func (Predicate_IPLD) Type() schema.Type {
+	return nil /*TODO:typelit*/
+}
+func (n Predicate_IPLD) Representation() ipld.Node {
+	return (*_Predicate_IPLD__Repr)(n)
+}
+type _Predicate_IPLD__Repr _Predicate_IPLD
+var (
+	fieldName__Predicate_IPLD_Tag_serial = _String{"Tag"}
+	fieldName__Predicate_IPLD_Positional_serial = _String{"Positional"}
+	fieldName__Predicate_IPLD_Named_serial = _String{"Named"}
+)
+var _ ipld.Node = &_Predicate_IPLD__Repr{}
+func (_Predicate_IPLD__Repr) Kind() ipld.Kind {
+	return ipld.Kind_Map
+}
+func (n *_Predicate_IPLD__Repr) LookupByString(key string) (ipld.Node, error) {
+	switch key {
+	case "Tag":
+		return n.Tag.Representation(), nil
+	case "Positional":
+		return n.Positional.Representation(), nil
+	case "Named":
+		return n.Named.Representation(), nil
+	default:
+		return nil, schema.ErrNoSuchField{Type: nil /*TODO*/, Field: ipld.PathSegmentOfString(key)}
+	}
+}
+func (n *_Predicate_IPLD__Repr) LookupByNode(key ipld.Node) (ipld.Node, error) {
+	ks, err := key.AsString()
+	if err != nil {
+		return nil, err
+	}
+	return n.LookupByString(ks)
+}
+func (_Predicate_IPLD__Repr) LookupByIndex(idx int64) (ipld.Node, error) {
+	return mixins.Map{"ipld.Predicate_IPLD.Repr"}.LookupByIndex(0)
+}
+func (n _Predicate_IPLD__Repr) LookupBySegment(seg ipld.PathSegment) (ipld.Node, error) {
+	return n.LookupByString(seg.String())
+}
+func (n *_Predicate_IPLD__Repr) MapIterator() ipld.MapIterator {
+	return &_Predicate_IPLD__ReprMapItr{n, 0}
+}
+
+type _Predicate_IPLD__ReprMapItr struct {
+	n   *_Predicate_IPLD__Repr
+	idx int
+	
+}
+
+func (itr *_Predicate_IPLD__ReprMapItr) Next() (k ipld.Node, v ipld.Node, _ error) {if itr.idx >= 3 {
+		return nil, nil, ipld.ErrIteratorOverread{}
+	}
+	switch itr.idx {
+	case 0:
+		k = &fieldName__Predicate_IPLD_Tag_serial
+		v = itr.n.Tag.Representation()
+	case 1:
+		k = &fieldName__Predicate_IPLD_Positional_serial
+		v = itr.n.Positional.Representation()
+	case 2:
+		k = &fieldName__Predicate_IPLD_Named_serial
+		v = itr.n.Named.Representation()
+	default:
+		panic("unreachable")
+	}
+	itr.idx++
+	return
+}
+func (itr *_Predicate_IPLD__ReprMapItr) Done() bool {
+	return itr.idx >= 3
+}
+func (_Predicate_IPLD__Repr) ListIterator() ipld.ListIterator {
+	return nil
+}
+func (rn *_Predicate_IPLD__Repr) Length() int64 {
+	l := 3
+	return int64(l)
+}
+func (_Predicate_IPLD__Repr) IsAbsent() bool {
+	return false
+}
+func (_Predicate_IPLD__Repr) IsNull() bool {
+	return false
+}
+func (_Predicate_IPLD__Repr) AsBool() (bool, error) {
+	return mixins.Map{"ipld.Predicate_IPLD.Repr"}.AsBool()
+}
+func (_Predicate_IPLD__Repr) AsInt() (int64, error) {
+	return mixins.Map{"ipld.Predicate_IPLD.Repr"}.AsInt()
+}
+func (_Predicate_IPLD__Repr) AsFloat() (float64, error) {
+	return mixins.Map{"ipld.Predicate_IPLD.Repr"}.AsFloat()
+}
+func (_Predicate_IPLD__Repr) AsString() (string, error) {
+	return mixins.Map{"ipld.Predicate_IPLD.Repr"}.AsString()
+}
+func (_Predicate_IPLD__Repr) AsBytes() ([]byte, error) {
+	return mixins.Map{"ipld.Predicate_IPLD.Repr"}.AsBytes()
+}
+func (_Predicate_IPLD__Repr) AsLink() (ipld.Link, error) {
+	return mixins.Map{"ipld.Predicate_IPLD.Repr"}.AsLink()
+}
+func (_Predicate_IPLD__Repr) Prototype() ipld.NodePrototype {
+	return _Predicate_IPLD__ReprPrototype{}
+}
+type _Predicate_IPLD__ReprPrototype struct{}
+
+func (_Predicate_IPLD__ReprPrototype) NewBuilder() ipld.NodeBuilder {
+	var nb _Predicate_IPLD__ReprBuilder
+	nb.Reset()
+	return &nb
+}
+type _Predicate_IPLD__ReprBuilder struct {
+	_Predicate_IPLD__ReprAssembler
+}
+func (nb *_Predicate_IPLD__ReprBuilder) Build() ipld.Node {
+	if *nb.m != schema.Maybe_Value {
+		panic("invalid state: cannot call Build on an assembler that's not finished")
+	}
+	return nb.w
+}
+func (nb *_Predicate_IPLD__ReprBuilder) Reset() {
+	var w _Predicate_IPLD
+	var m schema.Maybe
+	*nb = _Predicate_IPLD__ReprBuilder{_Predicate_IPLD__ReprAssembler{w: &w, m: &m}}
+}
+type _Predicate_IPLD__ReprAssembler struct {
+	w *_Predicate_IPLD
+	m *schema.Maybe
+	state maState
+	s int
+	f int
+
+	cm schema.Maybe
+	ca_Tag _String__ReprAssembler
+	ca_Positional _Nodes_IPLD__ReprAssembler
+	ca_Named _Pairs_IPLD__ReprAssembler
+	}
+
+func (na *_Predicate_IPLD__ReprAssembler) reset() {
+	na.state = maState_initial
+	na.s = 0
+	na.ca_Tag.reset()
+	na.ca_Positional.reset()
+	na.ca_Named.reset()
+}
+func (na *_Predicate_IPLD__ReprAssembler) BeginMap(int64) (ipld.MapAssembler, error) {
+	switch *na.m {
+	case schema.Maybe_Value, schema.Maybe_Null:
+		panic("invalid state: cannot assign into assembler that's already finished")
+	case midvalue:
+		panic("invalid state: it makes no sense to 'begin' twice on the same assembler!")
+	}
+	*na.m = midvalue
+	if na.w == nil {
+		na.w = &_Predicate_IPLD{}
+	}
+	return na, nil
+}
+func (_Predicate_IPLD__ReprAssembler) BeginList(sizeHint int64) (ipld.ListAssembler, error) {
+	return mixins.MapAssembler{"ipld.Predicate_IPLD.Repr"}.BeginList(0)
+}
+func (na *_Predicate_IPLD__ReprAssembler) AssignNull() error {
+	switch *na.m {
+	case allowNull:
+		*na.m = schema.Maybe_Null
+		return nil
+	case schema.Maybe_Absent:
+		return mixins.MapAssembler{"ipld.Predicate_IPLD.Repr.Repr"}.AssignNull()
+	case schema.Maybe_Value, schema.Maybe_Null:
+		panic("invalid state: cannot assign into assembler that's already finished")
+	case midvalue:
+		panic("invalid state: cannot assign null into an assembler that's already begun working on recursive structures!")
+	}
+	panic("unreachable")
+}
+func (_Predicate_IPLD__ReprAssembler) AssignBool(bool) error {
+	return mixins.MapAssembler{"ipld.Predicate_IPLD.Repr"}.AssignBool(false)
+}
+func (_Predicate_IPLD__ReprAssembler) AssignInt(int64) error {
+	return mixins.MapAssembler{"ipld.Predicate_IPLD.Repr"}.AssignInt(0)
+}
+func (_Predicate_IPLD__ReprAssembler) AssignFloat(float64) error {
+	return mixins.MapAssembler{"ipld.Predicate_IPLD.Repr"}.AssignFloat(0)
+}
+func (_Predicate_IPLD__ReprAssembler) AssignString(string) error {
+	return mixins.MapAssembler{"ipld.Predicate_IPLD.Repr"}.AssignString("")
+}
+func (_Predicate_IPLD__ReprAssembler) AssignBytes([]byte) error {
+	return mixins.MapAssembler{"ipld.Predicate_IPLD.Repr"}.AssignBytes(nil)
+}
+func (_Predicate_IPLD__ReprAssembler) AssignLink(ipld.Link) error {
+	return mixins.MapAssembler{"ipld.Predicate_IPLD.Repr"}.AssignLink(nil)
+}
+func (na *_Predicate_IPLD__ReprAssembler) AssignNode(v ipld.Node) error {
+	if v.IsNull() {
+		return na.AssignNull()
+	}
+	if v2, ok := v.(*_Predicate_IPLD); ok {
+		switch *na.m {
+		case schema.Maybe_Value, schema.Maybe_Null:
+			panic("invalid state: cannot assign into assembler that's already finished")
+		case midvalue:
+			panic("invalid state: cannot assign null into an assembler that's already begun working on recursive structures!")
+		}
+		if na.w == nil {
+			na.w = v2
+			*na.m = schema.Maybe_Value
+			return nil
+		}
+		*na.w = *v2
+		*na.m = schema.Maybe_Value
+		return nil
+	}
+	if v.Kind() != ipld.Kind_Map {
+		return ipld.ErrWrongKind{TypeName: "ipld.Predicate_IPLD.Repr", MethodName: "AssignNode", AppropriateKind: ipld.KindSet_JustMap, ActualKind: v.Kind()}
+	}
+	itr := v.MapIterator()
+	for !itr.Done() {
+		k, v, err := itr.Next()
+		if err != nil {
+			return err
+		}
+		if err := na.AssembleKey().AssignNode(k); err != nil {
+			return err
+		}
+		if err := na.AssembleValue().AssignNode(v); err != nil {
+			return err
+		}
+	}
+	return na.Finish()
+}
+func (_Predicate_IPLD__ReprAssembler) Prototype() ipld.NodePrototype {
+	return _Predicate_IPLD__ReprPrototype{}
+}
+func (ma *_Predicate_IPLD__ReprAssembler) valueFinishTidy() bool {
+	switch ma.f {
+	case 0:
+		switch ma.cm {
+		case schema.Maybe_Value:ma.cm = schema.Maybe_Absent
+			ma.state = maState_initial
+			return true
+		default:
+			return false
+		}
+	case 1:
+		switch ma.cm {
+		case schema.Maybe_Value:ma.cm = schema.Maybe_Absent
+			ma.state = maState_initial
+			return true
+		default:
+			return false
+		}
+	case 2:
+		switch ma.cm {
+		case schema.Maybe_Value:ma.cm = schema.Maybe_Absent
+			ma.state = maState_initial
+			return true
+		default:
+			return false
+		}
+	default:
+		panic("unreachable")
+	}
+}
+func (ma *_Predicate_IPLD__ReprAssembler) AssembleEntry(k string) (ipld.NodeAssembler, error) {
+	switch ma.state {
+	case maState_initial:
+		// carry on
+	case maState_midKey:
+		panic("invalid state: AssembleEntry cannot be called when in the middle of assembling another key")
+	case maState_expectValue:
+		panic("invalid state: AssembleEntry cannot be called when expecting start of value assembly")
+	case maState_midValue:
+		if !ma.valueFinishTidy() {
+			panic("invalid state: AssembleEntry cannot be called when in the middle of assembling a value")
+		} // if tidy success: carry on
+	case maState_finished:
+		panic("invalid state: AssembleEntry cannot be called on an assembler that's already finished")
+	}
+	switch k {
+	case "Tag":
+		if ma.s & fieldBit__Predicate_IPLD_Tag != 0 {
+			return nil, ipld.ErrRepeatedMapKey{Key: &fieldName__Predicate_IPLD_Tag_serial}
+		}
+		ma.s += fieldBit__Predicate_IPLD_Tag
+		ma.state = maState_midValue
+		ma.f = 0
+		ma.ca_Tag.w = &ma.w.Tag
+		ma.ca_Tag.m = &ma.cm
+		return &ma.ca_Tag, nil
+	case "Positional":
+		if ma.s & fieldBit__Predicate_IPLD_Positional != 0 {
+			return nil, ipld.ErrRepeatedMapKey{Key: &fieldName__Predicate_IPLD_Positional_serial}
+		}
+		ma.s += fieldBit__Predicate_IPLD_Positional
+		ma.state = maState_midValue
+		ma.f = 1
+		ma.ca_Positional.w = &ma.w.Positional
+		ma.ca_Positional.m = &ma.cm
+		return &ma.ca_Positional, nil
+	case "Named":
+		if ma.s & fieldBit__Predicate_IPLD_Named != 0 {
+			return nil, ipld.ErrRepeatedMapKey{Key: &fieldName__Predicate_IPLD_Named_serial}
+		}
+		ma.s += fieldBit__Predicate_IPLD_Named
+		ma.state = maState_midValue
+		ma.f = 2
+		ma.ca_Named.w = &ma.w.Named
+		ma.ca_Named.m = &ma.cm
+		return &ma.ca_Named, nil
+	default:
+	}
+	return nil, ipld.ErrInvalidKey{TypeName:"ipld.Predicate_IPLD.Repr", Key:&_String{k}}
+}
+func (ma *_Predicate_IPLD__ReprAssembler) AssembleKey() ipld.NodeAssembler {
+	switch ma.state {
+	case maState_initial:
+		// carry on
+	case maState_midKey:
+		panic("invalid state: AssembleKey cannot be called when in the middle of assembling another key")
+	case maState_expectValue:
+		panic("invalid state: AssembleKey cannot be called when expecting start of value assembly")
+	case maState_midValue:
+		if !ma.valueFinishTidy() {
+			panic("invalid state: AssembleKey cannot be called when in the middle of assembling a value")
+		} // if tidy success: carry on
+	case maState_finished:
+		panic("invalid state: AssembleKey cannot be called on an assembler that's already finished")
+	}
+	ma.state = maState_midKey
+	return (*_Predicate_IPLD__ReprKeyAssembler)(ma)
+}
+func (ma *_Predicate_IPLD__ReprAssembler) AssembleValue() ipld.NodeAssembler {
+	switch ma.state {
+	case maState_initial:
+		panic("invalid state: AssembleValue cannot be called when no key is primed")
+	case maState_midKey:
+		panic("invalid state: AssembleValue cannot be called when in the middle of assembling a key")
+	case maState_expectValue:
+		// carry on
+	case maState_midValue:
+		panic("invalid state: AssembleValue cannot be called when in the middle of assembling another value")
+	case maState_finished:
+		panic("invalid state: AssembleValue cannot be called on an assembler that's already finished")
+	}
+	ma.state = maState_midValue
+	switch ma.f {
+	case 0:
+		ma.ca_Tag.w = &ma.w.Tag
+		ma.ca_Tag.m = &ma.cm
+		return &ma.ca_Tag
+	case 1:
+		ma.ca_Positional.w = &ma.w.Positional
+		ma.ca_Positional.m = &ma.cm
+		return &ma.ca_Positional
+	case 2:
+		ma.ca_Named.w = &ma.w.Named
+		ma.ca_Named.m = &ma.cm
+		return &ma.ca_Named
+	default:
+		panic("unreachable")
+	}
+}
+func (ma *_Predicate_IPLD__ReprAssembler) Finish() error {
+	switch ma.state {
+	case maState_initial:
+		// carry on
+	case maState_midKey:
+		panic("invalid state: Finish cannot be called when in the middle of assembling a key")
+	case maState_expectValue:
+		panic("invalid state: Finish cannot be called when expecting start of value assembly")
+	case maState_midValue:
+		if !ma.valueFinishTidy() {
+			panic("invalid state: Finish cannot be called when in the middle of assembling a value")
+		} // if tidy success: carry on
+	case maState_finished:
+		panic("invalid state: Finish cannot be called on an assembler that's already finished")
+	}
+	if ma.s & fieldBits__Predicate_IPLD_sufficient != fieldBits__Predicate_IPLD_sufficient {
+		err := ipld.ErrMissingRequiredField{Missing: make([]string, 0)}
+		if ma.s & fieldBit__Predicate_IPLD_Tag == 0 {
+			err.Missing = append(err.Missing, "Tag")
+		}
+		if ma.s & fieldBit__Predicate_IPLD_Positional == 0 {
+			err.Missing = append(err.Missing, "Positional")
+		}
+		if ma.s & fieldBit__Predicate_IPLD_Named == 0 {
+			err.Missing = append(err.Missing, "Named")
+		}
+		return err
+	}
+	ma.state = maState_finished
+	*ma.m = schema.Maybe_Value
+	return nil
+}
+func (ma *_Predicate_IPLD__ReprAssembler) KeyPrototype() ipld.NodePrototype {
+	return _String__Prototype{}
+}
+func (ma *_Predicate_IPLD__ReprAssembler) ValuePrototype(k string) ipld.NodePrototype {
+	panic("todo structbuilder mapassembler repr valueprototype")
+}
+type _Predicate_IPLD__ReprKeyAssembler _Predicate_IPLD__ReprAssembler
+func (_Predicate_IPLD__ReprKeyAssembler) BeginMap(sizeHint int64) (ipld.MapAssembler, error) {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.Repr.KeyAssembler"}.BeginMap(0)
+}
+func (_Predicate_IPLD__ReprKeyAssembler) BeginList(sizeHint int64) (ipld.ListAssembler, error) {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.Repr.KeyAssembler"}.BeginList(0)
+}
+func (na *_Predicate_IPLD__ReprKeyAssembler) AssignNull() error {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.Repr.KeyAssembler"}.AssignNull()
+}
+func (_Predicate_IPLD__ReprKeyAssembler) AssignBool(bool) error {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.Repr.KeyAssembler"}.AssignBool(false)
+}
+func (_Predicate_IPLD__ReprKeyAssembler) AssignInt(int64) error {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.Repr.KeyAssembler"}.AssignInt(0)
+}
+func (_Predicate_IPLD__ReprKeyAssembler) AssignFloat(float64) error {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.Repr.KeyAssembler"}.AssignFloat(0)
+}
+func (ka *_Predicate_IPLD__ReprKeyAssembler) AssignString(k string) error {
+	if ka.state != maState_midKey {
+		panic("misuse: KeyAssembler held beyond its valid lifetime")
+	}
+	switch k {
+	case "Tag":
+		if ka.s & fieldBit__Predicate_IPLD_Tag != 0 {
+			return ipld.ErrRepeatedMapKey{Key: &fieldName__Predicate_IPLD_Tag_serial}
+		}
+		ka.s += fieldBit__Predicate_IPLD_Tag
+		ka.state = maState_expectValue
+		ka.f = 0
+		return nil
+	case "Positional":
+		if ka.s & fieldBit__Predicate_IPLD_Positional != 0 {
+			return ipld.ErrRepeatedMapKey{Key: &fieldName__Predicate_IPLD_Positional_serial}
+		}
+		ka.s += fieldBit__Predicate_IPLD_Positional
+		ka.state = maState_expectValue
+		ka.f = 1
+		return nil
+	case "Named":
+		if ka.s & fieldBit__Predicate_IPLD_Named != 0 {
+			return ipld.ErrRepeatedMapKey{Key: &fieldName__Predicate_IPLD_Named_serial}
+		}
+		ka.s += fieldBit__Predicate_IPLD_Named
+		ka.state = maState_expectValue
+		ka.f = 2
+		return nil
+	}
+	return ipld.ErrInvalidKey{TypeName:"ipld.Predicate_IPLD.Repr", Key:&_String{k}}
+}
+func (_Predicate_IPLD__ReprKeyAssembler) AssignBytes([]byte) error {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.Repr.KeyAssembler"}.AssignBytes(nil)
+}
+func (_Predicate_IPLD__ReprKeyAssembler) AssignLink(ipld.Link) error {
+	return mixins.StringAssembler{"ipld.Predicate_IPLD.Repr.KeyAssembler"}.AssignLink(nil)
+}
+func (ka *_Predicate_IPLD__ReprKeyAssembler) AssignNode(v ipld.Node) error {
+	if v2, err := v.AsString(); err != nil {
+		return err
+	} else {
+		return ka.AssignString(v2)
+	}
+}
+func (_Predicate_IPLD__ReprKeyAssembler) Prototype() ipld.NodePrototype {
+	return _String__Prototype{}
 }
 
 func (n String) String() string {

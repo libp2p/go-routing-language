@@ -1,9 +1,11 @@
 package syntax
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/ipld/go-ipld-prime"
+	xipld "github.com/libp2p/go-routing-language/syntax/ipld"
 )
 
 type Node interface {
@@ -21,6 +23,34 @@ func (ns Nodes) IndexOf(element Node) int {
 		}
 	}
 	return -1
+}
+
+func (ns Nodes) ToIPLD() (ipld.Node, error) {
+	// Build elements
+	lbuild := xipld.Type.Nodes_IPLD.NewBuilder()
+	// NOTE: We can assign here directly the size of Pairs instead of -1
+	la, err := lbuild.BeginList(-1)
+	if err != nil {
+		return nil, err
+	}
+	// For each pair
+	for _, e := range ns {
+
+		// Add element to the list of nodes
+		n, err := e.toNode_IPLD()
+		if err != nil {
+			return nil, err
+		}
+		// la.AssembleValue is Node_IPLD Assembler. Need to assemble a node
+		if err := la.AssembleValue().AssignNode(n); err != nil {
+			return nil, fmt.Errorf("Error assembling value: %s", err)
+		}
+	}
+	// Finish list building
+	if err := la.Finish(); err != nil {
+		return nil, err
+	}
+	return lbuild.Build(), nil
 }
 
 // AreSameNodes compairs to lists of key/values for set-wise equality (order independent).

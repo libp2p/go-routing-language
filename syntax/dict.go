@@ -13,12 +13,12 @@ type Pair struct {
 	Value Node `json:"value"`
 }
 
-func (p Pair) WritePretty(w io.Writer) error {
+func (p Pair) WritePretty(w io.Writer, relation string) error {
 	if !IsEqual(p.Key, p.Value) {
 		if err := p.Key.WritePretty(w); err != nil {
 			return err
 		}
-		if _, err := w.Write([]byte(" : ")); err != nil {
+		if _, err := w.Write([]byte(relation)); err != nil {
 			return err
 		}
 	}
@@ -40,69 +40,7 @@ func (ps Pairs) IndexOf(key Node) int {
 	return -1
 }
 
-// AreSamePairs compairs to lists of key/values for set-wise equality (order independent).
-func AreSamePairs(x, y Pairs) bool {
-	if len(x) != len(y) {
-		return false
-	}
-	for _, x := range x {
-		if i := y.IndexOf(x.Key); i < 0 {
-			return false
-		} else {
-			if !IsEqual(x.Value, y[i].Value) {
-				return false
-			}
-		}
-	}
-	return true
-}
-
-// Dict is a set of uniquely-keyed values.
-type Dict struct {
-	Pairs Pairs // keys must be unique wrt IsEqual
-}
-
-func (d Dict) Len() int {
-	return len(d.Pairs)
-}
-
-func (d Dict) WritePretty(w io.Writer) error {
-	if _, err := w.Write([]byte{'{'}); err != nil {
-		return err
-	}
-	u := IndentWriter(w)
-	if _, err := u.Write([]byte{'\n'}); err != nil {
-		return err
-	}
-	for i, p := range d.Pairs {
-		if err := p.WritePretty(u); err != nil {
-			return err
-		}
-		if i+1 == len(d.Pairs) {
-			if _, err := w.Write([]byte("\n")); err != nil {
-				return err
-			}
-		} else {
-			if _, err := u.Write([]byte("\n")); err != nil {
-				return err
-			}
-		}
-	}
-	if _, err := w.Write([]byte{'}'}); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (d Dict) ToIPLD() (ipld.Node, error) {
-	// NOTE: Consider adding multierr throughout this whole function
-	// Initialize Dict
-	dbuild := xipld.Type.Dict_IPLD.NewBuilder()
-	ma, err := dbuild.BeginMap(-1)
-	if err != nil {
-		return nil, err
-	}
-
+func (ps Pairs) ToIPLD() (ipld.Node, error) {
 	// Build pairs
 	lbuild := xipld.Type.Pairs_IPLD.NewBuilder()
 	// NOTE: We can assign here directly the size of Pairs instead of -1
@@ -111,7 +49,7 @@ func (d Dict) ToIPLD() (ipld.Node, error) {
 		return nil, err
 	}
 	// For each pair
-	for _, p := range d.Pairs {
+	for _, p := range ps {
 		pbuild := xipld.Type.Pair_IPLD.NewBuilder()
 		// NOTE: We can initialize the map with 2 instead of -1
 		pa, err := pbuild.BeginMap(-1)
@@ -158,12 +96,82 @@ func (d Dict) ToIPLD() (ipld.Node, error) {
 	if err := la.Finish(); err != nil {
 		return nil, err
 	}
+	return lbuild.Build(), nil
+}
+
+// AreSamePairs compairs to lists of key/values for set-wise equality (order independent).
+func AreSamePairs(x, y Pairs) bool {
+	if len(x) != len(y) {
+		return false
+	}
+	for _, x := range x {
+		if i := y.IndexOf(x.Key); i < 0 {
+			return false
+		} else {
+			if !IsEqual(x.Value, y[i].Value) {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+// Dict is a set of uniquely-keyed values.
+type Dict struct {
+	Pairs Pairs // keys must be unique wrt IsEqual
+}
+
+func (d Dict) Len() int {
+	return len(d.Pairs)
+}
+
+func (d Dict) WritePretty(w io.Writer) error {
+	if _, err := w.Write([]byte{'{'}); err != nil {
+		return err
+	}
+	u := IndentWriter(w)
+	if _, err := u.Write([]byte{'\n'}); err != nil {
+		return err
+	}
+	for i, p := range d.Pairs {
+		if err := p.WritePretty(u, ": "); err != nil {
+			return err
+		}
+		if i+1 == len(d.Pairs) {
+			if _, err := w.Write([]byte("\n")); err != nil {
+				return err
+			}
+		} else {
+			if _, err := u.Write([]byte("\n")); err != nil {
+				return err
+			}
+		}
+	}
+	if _, err := w.Write([]byte{'}'}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d Dict) ToIPLD() (ipld.Node, error) {
+	// NOTE: Consider adding multierr throughout this whole function
+	// Initialize Dict
+	dbuild := xipld.Type.Dict_IPLD.NewBuilder()
+	ma, err := dbuild.BeginMap(-1)
+	if err != nil {
+		return nil, err
+	}
+	// Build pairs
+	pairsIPLD, err := d.Pairs.ToIPLD()
+	if err != nil {
+		return nil, err
+	}
 	// Assign list of pairs to dict
 	psasm, err := ma.AssembleEntry("Pairs")
 	if err != nil {
 		return nil, err
 	}
-	err = psasm.AssignNode(lbuild.Build())
+	err = psasm.AssignNode(pairsIPLD)
 	if err != nil {
 		return nil, err
 	}

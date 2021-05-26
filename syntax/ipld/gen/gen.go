@@ -40,20 +40,23 @@ func main() {
 			"Bool_IPLD",
 			"Dict_IPLD",
 			"List_IPLD",
+			"Predicate_IPLD",
 		},
 
 		// Keys for the JSON representation of types
 		schema.SpawnUnionRepresentationKeyed(map[string]schema.TypeName{
-			"String": "String_IPLD",
-			"Bytes":  "Bytes_IPLD",
-			"Int":    "Int_IPLD",
-			"Float":  "Float_IPLD",
-			"Bool":   "Bool_IPLD",
-			"Dict":   "Dict_IPLD",
-			"List":   "List_IPLD",
+			"String":    "String_IPLD",
+			"Bytes":     "Bytes_IPLD",
+			"Int":       "Int_IPLD",
+			"Float":     "Float_IPLD",
+			"Bool":      "Bool_IPLD",
+			"Dict":      "Dict_IPLD",
+			"List":      "List_IPLD",
+			"Predicate": "Predicate_IPLD",
 		}),
 	))
 
+	// DICT
 	ts.Accumulate(schema.SpawnStruct("Dict_IPLD",
 		[]schema.StructField{
 			schema.SpawnStructField("Pairs", "Pairs_IPLD", false, false),
@@ -71,6 +74,7 @@ func main() {
 		schema.SpawnStructRepresentationMap(nil),
 	))
 
+	// LIST
 	ts.Accumulate(schema.SpawnStruct("List_IPLD",
 		[]schema.StructField{
 			schema.SpawnStructField("Elements", "Nodes_IPLD", false, false),
@@ -79,6 +83,16 @@ func main() {
 	))
 	ts.Accumulate(schema.SpawnList("Nodes_IPLD",
 		"Node_IPLD", false,
+	))
+
+	// PREDICATE
+	ts.Accumulate(schema.SpawnStruct("Predicate_IPLD",
+		[]schema.StructField{
+			schema.SpawnStructField("Tag", "String", false, false),
+			schema.SpawnStructField("Positional", "Nodes_IPLD", false, false),
+			schema.SpawnStructField("Named", "Pairs_IPLD", false, false),
+		},
+		schema.SpawnStructRepresentationMap(nil),
 	))
 
 	if errs := ts.ValidateGraph(); errs != nil {

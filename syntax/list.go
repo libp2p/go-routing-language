@@ -1,7 +1,6 @@
 package syntax
 
 import (
-	"fmt"
 	"io"
 
 	"github.com/ipld/go-ipld-prime"
@@ -66,29 +65,9 @@ func (s List) ToIPLD() (ipld.Node, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	// Build elements
-	lbuild := xipld.Type.Nodes_IPLD.NewBuilder()
-	// NOTE: We can assign here directly the size of Pairs instead of -1
-	la, err := lbuild.BeginList(-1)
+	elemsIPLD, err := s.Elements.ToIPLD()
 	if err != nil {
-		return nil, err
-	}
-	// For each pair
-	for _, e := range s.Elements {
-
-		// Add element to the list of nodes
-		n, err := e.toNode_IPLD()
-		if err != nil {
-			return nil, err
-		}
-		// la.AssembleValue is Node_IPLD Assembler. Need to assemble a node
-		if err := la.AssembleValue().AssignNode(n); err != nil {
-			return nil, fmt.Errorf("Error assembling value: %s", err)
-		}
-	}
-	// Finish list building
-	if err := la.Finish(); err != nil {
 		return nil, err
 	}
 	// Assign elements to set
@@ -96,7 +75,7 @@ func (s List) ToIPLD() (ipld.Node, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = psasm.AssignNode(lbuild.Build())
+	err = psasm.AssignNode(elemsIPLD)
 	if err != nil {
 		return nil, err
 	}

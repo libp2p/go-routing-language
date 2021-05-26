@@ -32,6 +32,11 @@ func IsEqual(x, y Node) bool {
 		case List:
 			return IsEqualList(x1, y1)
 		}
+	case Predicate:
+		switch y1 := y.(type) {
+		case Predicate:
+			return IsEqualPredicate(x1, y1)
+		}
 	}
 	return false
 }
