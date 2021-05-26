@@ -17,6 +17,7 @@ var ipldTypeTags = []string{
 	"Bool_IPLD",
 	"Dict_IPLD",
 	"List_IPLD",
+	"Predicate_IPLD",
 }
 
 // FromIPLD transforms an IPLD Node into its xr.Node representation
@@ -62,6 +63,9 @@ func FromIPLD(n ipld.Node) (Node, error) {
 
 	case xipld.Dict_IPLD:
 		return fromIPLDToDict(n1)
+
+	case xipld.Predicate_IPLD:
+		return fromIPLDToPredicate(n1)
 
 	case xipld.Node_IPLD:
 		for _, k := range ipldTypeTags {
@@ -118,5 +122,46 @@ func fromIPLDToDict(n xipld.Dict_IPLD) (Dict, error) {
 		pairs = append(pairs, Pair{Key: k, Value: v})
 	}
 	return Dict{Pairs: pairs}, nil
+}
 
+// Create Predicate in XR from Predicate_IPLD
+func fromIPLDToPredicate(n xipld.Predicate_IPLD) (Predicate, error) {
+	// Get positional
+	els := make([]Node, 0)
+	li := n.FieldPositional().Iterator()
+	for !li.Done() {
+		_, enode := li.Next()
+		n, err := FromIPLD(enode)
+		if err != nil {
+			return Predicate{}, err
+		}
+		// Append element
+		els = append(els, n)
+	}
+
+	// Get named
+	pairs := make([]Pair, 0)
+	pi := n.FieldNamed().Iterator()
+	for !pi.Done() {
+		_, enode := pi.Next()
+		// Get key and convert to xr.Node
+		ikey := enode.FieldKey()
+		k, err := FromIPLD(ikey)
+		if err != nil {
+			return Predicate{}, err
+		}
+		// Get value and convert to xr.Node
+		ivalue := enode.FieldValue()
+		v, err := FromIPLD(ivalue)
+		if err != nil {
+			return Predicate{}, err
+		}
+		// Append pair
+		pairs = append(pairs, Pair{Key: k, Value: v})
+	}
+	t, err := n.FieldTag().AsString()
+	if err != nil {
+		return Predicate{}, err
+	}
+	return Predicate{Tag: t, Positional: els, Named: pairs}, nil
 }

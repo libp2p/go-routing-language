@@ -126,6 +126,31 @@ func TestDictIPLD(t *testing.T) {
 
 }
 
+func TestPredicateIPLD(t *testing.T) {
+	b := Predicate{
+		Tag: "tag",
+		Positional: Nodes{
+			Bool{true},
+			Int{big.NewInt(567)},
+		},
+		Named: Pairs{
+			{Bool{true}, Int{big.NewInt(567)}},
+		},
+	}
+	bi, err := b.ToIPLD()
+	if err != nil {
+		t.Fatal(err)
+	}
+	bo, err := FromIPLD(bi)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !IsEqual(b, bo) {
+		t.Fatal("e2e Predicate transformation failed", b, bo)
+	}
+
+}
+
 func TestCBORMarshalCBOR(t *testing.T) {
 	n := Dict{
 		Pairs: Pairs{
