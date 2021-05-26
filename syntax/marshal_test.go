@@ -194,6 +194,31 @@ func TestMarshalJSONList(t *testing.T) {
 
 }
 
+func TestMarshalJSONPredicate(t *testing.T) {
+	n := Predicate{
+		Tag: "tag",
+		Positional: Nodes{
+			Bool{true},
+			Int{big.NewInt(567)},
+		},
+		Named: Pairs{
+			{Bool{true}, Int{big.NewInt(567)}},
+		},
+	}
+
+	b, err := MarshalJSON(n)
+	if err != nil {
+		t.Fatal(err)
+	}
+	out, err := UnmarshalJSON(b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !IsEqual(n, out) {
+		t.Fatal("error unmarshalling Dict")
+	}
+}
+
 func TestMarshalCBORAll(t *testing.T) {
 	n := Dict{
 		Pairs: Pairs{
