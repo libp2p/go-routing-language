@@ -23,6 +23,6 @@ func ParseLink(ctx *ParseCtx, src syntax.Node) (cid.Cid, error) {
 	if !ok {
 		return cid.Cid{}, fmt.Errorf("expecting a string argument")
 	}
-	c, err := cid.Decode(s)
+	c, err := cid.Decode(s.Value)
 	return c, err
 }
