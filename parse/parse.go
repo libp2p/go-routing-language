@@ -4,6 +4,10 @@ import (
 	"github.com/libp2p/go-routing-language/syntax"
 )
 
+// Parser represents an algorithm that recognizes a set of syntactic expressions
+// and returns a Go representation of the parsed information.
+// This interface enables the implementation of generic compositions of parsing rules,
+// also known as "parser combinators".
 type Parser interface {
 	Parse(ctx *ParseCtx, src syntax.Node) (interface{}, error)
 }
