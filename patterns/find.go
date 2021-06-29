@@ -28,6 +28,16 @@ func (FindCidParser) Parse(ctx *parse.ParseCtx, src syntax.Node) (interface{}, e
 	return ParseFindCid(ctx, src)
 }
 
+func MatchAllFindCid(ctx *parse.ParseCtx, match parse.Parser, src syntax.Node) []*FindCid {
+	m := FindCidParser{}
+	found := parse.MatchAll(ctx, m, src)
+	r := make([]*FindCid, len(found))
+	for i, e := range found {
+		r[i] = e.(*FindCid)
+	}
+	return r
+}
+
 // ParseFindCid parses formulas of the form `link(CID:STRING)`.
 func ParseFindCid(ctx *parse.ParseCtx, src syntax.Node) (*FindCid, error) {
 	p0, ok := src.(syntax.Predicate)
@@ -40,11 +50,11 @@ func ParseFindCid(ctx *parse.ParseCtx, src syntax.Node) (*FindCid, error) {
 	if len(p0.Positional) != 1 {
 		return nil, fmt.Errorf("expecting one argument")
 	}
-	l, err := ParseLink(ctx, p0.Positional[0])
+	link, err := ParseLink(ctx, p0.Positional[0])
 	if err != nil {
 		return nil, fmt.Errorf("parsing link (%v)", err)
 	}
-	return &FindCid{Cid: l.Cid}, err
+	return &FindCid{Cid: link.Cid}, err
 }
 
 // FindPath is the Go representation of the `find(path(PATH:STRING))` pattern from the Routing Language Spec.

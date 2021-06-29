@@ -15,6 +15,16 @@ type Predicate struct {
 	Named      Pairs // the keys in each pair must be unique wrt IsEqual
 }
 
+func (p Predicate) GetNamed(name string) Node {
+	for _, p := range p.Named {
+		s, ok := p.Key.(String)
+		if ok && s.Value == name {
+			return p.Value
+		}
+	}
+	return nil
+}
+
 func (p Predicate) WritePretty(w io.Writer) error {
 	if _, err := w.Write([]byte(p.Tag)); err != nil {
 		return err

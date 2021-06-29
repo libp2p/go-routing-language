@@ -13,6 +13,8 @@ type Peer struct {
 	ID peer.ID
 }
 
+func (p *Peer) IsProvider() {}
+
 func (p *Peer) Express() syntax.Node {
 	return syntax.Predicate{
 		Tag: "peer",

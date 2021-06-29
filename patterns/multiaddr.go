@@ -13,6 +13,8 @@ type Multiaddr struct {
 	Multiaddr ma.Multiaddr
 }
 
+func (p *Multiaddr) IsProvider() {}
+
 func (p *Multiaddr) Express() syntax.Node {
 	return syntax.Predicate{
 		Tag: "multiaddr",
