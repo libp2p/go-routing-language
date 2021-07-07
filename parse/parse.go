@@ -16,6 +16,10 @@ type ParseCtx struct {
 	keys map[interface{}]interface{}
 }
 
+func NewParseCtx() *ParseCtx {
+	return &ParseCtx{keys: map[interface{}]interface{}{}}
+}
+
 func (x *ParseCtx) Set(key interface{}, value interface{}) interface{} {
 	v := x.keys[key]
 	x.keys[key] = value
