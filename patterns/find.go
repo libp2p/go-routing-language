@@ -38,7 +38,7 @@ func MatchAllFindCid(ctx *parse.ParseCtx, match parse.Parser, src syntax.Node) [
 	return r
 }
 
-// ParseFindCid parses formulas of the form `link(CID:STRING)`.
+// ParseFindCid parses formulas of the form `find(link(CID:STRING))`.
 func ParseFindCid(ctx *parse.ParseCtx, src syntax.Node) (*FindCid, error) {
 	p0, ok := src.(syntax.Predicate)
 	if !ok {

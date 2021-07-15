@@ -1,0 +1,275 @@
+ROUTING LANGUAGE SPEC, V0
+
+This document describes the routing language, which is used in the Composable Routing Framework.
+
+
+REQUIREMENTS
+
+Fulfil the use cases in Golden Path Routing Requirements and existing IPFS content routing uses (IPFS and IPNS path resolution, as well as bitswap and graphsync file downloads).
+
+
+CONTEXT
+
+Expressions in the routing language are used as the inputs and outputs of routing calls. Calls are governed by the routing interface:
+
+	route(expression) —> expression
+
+On the wire, routing expressions are serialized. To serialize a routing expression, it is first (injectively, i.e. reversibly) mapped to an IPLD (data model) representation and then the IPLD representation is serialized. Deserialization proceeds in reverse.
+
+
+GRAMMAR
+
+The specification of valid routing expressions is presented in the form of “grammar rules”. Each rule is of the form:
+
+	RULE_NAME is one of
+		PATTERN_1
+		PATTERN_2
+		...
+
+RULE_NAME is an identifier for the rule. Rule identifiers are used in patterns to refer to grammar rules.
+
+PATTERNs are routing expressions that can contain “syntactic variables”. A syntactic variable is a placeholder for any expression that abides by the grammar rule governing the syntactic variable. Syntactic variables are written, as:
+
+	SYNTACTIC_VARIABLE_NAME:GRAMMAR_RULE_NAME
+
+Some PATTERNs can be “evaluated” in the sense that they can be viewed similarly to a function call which “returns” a result. In these cases, the set of possible “return” values is defined as a collection of patterns, at least one of which must match a valid return value. These “return patterns” are listed immediately below the pattern they apply to, each prefixed by a “—>” for clarity.
+Patterns that cannot be “evaluated” are terminal; they have no associated “return patterns”. For example:
+
+	RULE_NAME is one of
+		NONTERMINAL_PATTERN_1
+               —> RETURN_PATTERN_11
+               —> RETURN_PATTERN_12
+               ...
+		NONTERMINAL_PATTERN_2
+               —> RETURN_PATTERN_21
+               —> RETURN_PATTERN_22
+               ...
+          TERMINAL_PATTERN_3
+          TERMINAL_PATTERN_4
+		...
+
+
+REQUEST/RESPONSE SEMANTICS
+
+When one party makes a routing request to another, the request-response interaction follows these generic rules:
+
+(1) The request contains a “query” which can be any routing expression. (In particular, it is not required to abide by any specific grammar rule.)
+(2) The system receiving and processing the request can rewrite zero or more predicate subexpressions of the query and return the rewritten query as a response. In doing so, the following conditions must be met:
+(2.1) The rewritten subexpressions must match grammar rules (from the spec below) for evaluateable predicates.
+(2.2) The rewriting expressions must be “equivalent” to the original expressions. Where two expressions are equivalent if either of the following holds:
+(a) The rewriting expression is the result of evaluating the rewritten predicate. And, in this case, the rewriting expression must also match one of the declared return patterns for the rewritten predicate (in the spec below), or
+(b) The rewriting expression is any expression, which when evaluated would return the same result as the rewritten predicate.
+
+Any implementation of the routing interface that meets these generic requirements is a “valid” implementation.
+
+One notable consequence of this “non-standard” response semantics is that predicates that can be evaluated need not bother specifying error-case return patterns (unlike typical functions in a programming language). In the case a predicate cannot be evaluated (due to some error) it can simply be left alone, without being rewritten in the response, as this allowed behavior according to the rules (above).
+
+These generic semantics enable the interoperation of content routing systems that “implement” (or “understand”) different subsets of the routing language spec (below).
+
+
+BASIC DATA TYPES
+
+# EXPR is a union of all basic types.
+EXPR is one of
+	STRING
+	INT
+	FLOAT
+	BOOL
+	BYTES
+	DICT
+	LIST
+	PREDICATE
+
+# IPLD captures the IPLD subset of the basic types; i.e. everything but PREDICATEs.
+IPLD is one of
+	STRING
+	INT
+	FLOAT
+	BOOL
+	BYTES
+	DICT
+	LIST
+
+
+BASIC DATA ARITHMETIC
+
+# SELECT expressions select the value corresponding to a single key (or recursively a path of keys)
+# inside a dictionary or a predicate expression.
+SELECT is one of
+	# select a key from a given dictionary or predicate
+	select(DICT:DICT, KEY:STRING)
+		—> EXPR
+	# recursively select a path of keys from a given root dictionary or predicate
+	select(DICT:DICT, PATH:[ STRING ])
+		—> EXPR
+	# if the provided EXPR is a predicate matching TAG, then select KEY from its keyword arguments
+	select(TAG:STRING, EXPR:EXPR, KEY:STRING)
+		—> EXPR
+	# if the provided EXPR is a predicate matching TAG, then select INDEX from its anonymous arguments
+	select(TAG:STRING, EXPR:EXPR, INDEX:INT)
+		—> EXPR
+	# select INDEX-th element from the LIST
+	select(LIST:LIST, INDEX:INT)
+		—> EXPR
+
+
+ROUTING DATA TYPES
+
+# LINK is a cid.
+LINK is one of
+	link(MULTIFORMAT:STRING)     # MULTIFORMAT must be a valid multiformat string encoding
+	link(MULTIFORMAT:BYTES)     # MULTIFORMAT must be a valid multiformat binary encoding
+
+# MULTIADDR is a multiaddress.
+MULTIADDR is one of
+	# MULTIADDR must be a valid multiaddress string encoding
+	multiaddr(MULTIADDR:STRING)
+	# MULTIADDR must be a valid multiaddress binary encoding
+	multiaddr(MULTIADDR:BYTES)
+
+# PEER describes an IPFS peer.
+PEER is one of
+	peer(id=STRING)
+	peer(id=BYTES)
+	peer(id=STRING, multiaddr=[ MULTIADDR ])
+	peer(id=BYTES, multiaddr=[ MULTIADDR ])
+
+# PROVIDER is a union of all valid ways to describe a provider of content.
+PROVIDER
+	MULTIADDR
+	PEER
+
+# PROVENANCE describes the provenance of a piece of content in the form of a path
+# whose nodes are PROVIDERS.
+PROVENANCE is one of
+     provenance(latest=PROVIDER, rest=PROVENANCE)
+     provenance(latest=PROVIDER)
+
+
+ROUTING OBJECTIVES
+
+# PROVIDE informs the recipient of the request that some content, identified by a cid, is provided in some manner.
+PROVIDE is one of
+	# the cid link describes the content being provided.
+	# the fetch expression describes the routing expression to be used when fetching the content.
+	provide( cid=link(CID:STRING)), fetch=FETCH:EXPR )
+		—> provided_ok()
+		e.g. provide(
+			cid=link("Qm15")),
+			fetch=fetch(
+				cid=link("Qm15"),
+				proto=bitswap, # identifiers, here `bitswap`, are string literals
+				providers=[connected(multiaddr("/ip4/8.1.1.9:44"))],
+			)
+		)
+		e.g. provide(
+			cid=link("Qm15")),
+			fetch=fetch(
+				cid=link("Qm15"),
+				proto=graphsync,
+				graphsync_voucher=0x12ef78cd,
+				providers=[connected(multiaddr("/ip4/8.1.1.9:44"))],
+			)
+		)
+
+# FIND evaluates to the contents pointed to by a content link.
+FIND is one of
+	# FIND evaluates to the contents pointed to by a cid key.
+	find( link(CID:STRING) )
+		—> found_providers( provenance=PROVENANCE, fetch=FETCH )
+		—> found_content( provenance=PROVENANCE, content=EXPR )
+	# FIND evaluates to the contents pointed to by an IPFS or IPNS path.
+	find( path(PATH:STRING) )
+		# return variants are the same as above.
+
+# FETCH fetches a single content block
+FETCH is one of
+	# fetch the content for CID from the given providers, using any protocol
+	fetch( cid=link(CID:STRING), providers=[PROVIDER] )
+		# when returning a successful result, annotate it with the provenance path of the content
+		—> fetched_content( provenance=PROVENANCE, content=EXPR )
+	# fetch the content for CID from the given providers, using bitswap
+	fetch( cid=link(CID:STRING), proto=bitswap, providers=[PROVIDER] )
+		# same return variants as above
+	# fetch the content for CID from the given providers, using graphsync
+	fetch( cid=link(CID:STRING), proto=graphsync, graphsync_voucher=BYTES, providers=[PROVIDER] )
+		# same return variants as above
+
+# DOWNLOAD fetches all blocks in a file and returns the entire file contents
+DOWNLOAD is one of
+	# FILE must evaluate to the contents of the IPLD node describing a file.
+	# have and dont_have are optional, mutually-exclusive lists of cids, describing a narrower goal.
+	download(file=FILE:EXPR, have=[ LINK ], dont_have=[ LINK ])
+# download results are returned as a list of downloaded blocks
+		—> [ downloaded_block( provenance=PROVENANCE, link=LINK, content=EXPR ) ]
+
+
+COMBINATORS, REFLECTION
+
+# EVAL interprets its input, which must be an IPLD value, as a routing expression and returns it.
+# EVAL can be used to implement bulk providing. See examples below.
+EVAL is one of
+	eval(IPLD)
+		# the returned expression is the IPLD data interpreted as a routing expression
+		—> EXPR
+	eval(IPLD; interpret=hamt)
+		# the returned expression is the IPLD data interpreted as a HAMT of CIDs
+		—> EXPR
+
+EXAMPLES
+
+In the following examples, “EXPR_QUERY => EXPR_RETURN” means that EXPR_QUERY was passed as a routing request and EXPR_RETURN was returned as a result.
+
+In particular, you will see chains of “=>”, as in “Q1 => Q2 => Q3 => Q4”. You can read this as:
+- Alice sends a route request Q1 to Bob
+- Bob responds with Q2
+- Alice sends Q2 as a route request to Charlie
+- Charlie responds with Q3
+- Alice sends Q3 as a route request to Dora
+- Dora responds with Q4, which is the final answer.
+
+Now, on to the examples:
+
+* Example of batching requests. Batching requests is accomplished simply by placing a few independent requests in a list, e.g.
+
+	[
+		provide(cid="Qm12", fetch=fetch(cid="Qm12", providers=[multiaddr("/ip4/1.2.3.4:55")])),
+		provide(cid="Qm34", fetch=fetch(cid="Qm34", providers=[multiaddr("/ip4/1.2.3.4:55")])),
+		find(cid="Qm34"),
+	]
+	=> [
+		# provide was evaluated
+          provided_ok(),
+          # provide was not evaluated
+          provide(cid="Qm34", fetch=fetch(cid="Qm34", providers=[multiaddr("/ip4/1.2.3.4:55")])),
+          # find was partially evaluated
+          fetch(cid="Qm34", providers=[multiaddr("/ip4/1.2.3.4:55")])
+     ]
+
+* Example of resolving an IPFS link, say "/ipfs/Qm12/foo", to the contents it points to. The IPFS link corresponds to a routing expression, like so
+
+	select(find(cid="Qm12"), ["content", "foo"])
+	=> select(fetch(cid="Qm12", providers=[peer(id="pq23")]), ["content", "foo"])
+	=> select(
+          fetched_content(
+               provenance=peer(id="pq23"),
+               content={ foo=link("Qx78"), bar=88 },
+          ),
+          ["content", "foo"]
+     )
+	=> link("Qx78")
+
+* Example of a miner sending a large batch of cid provide commands to an indexer. 
+
+	eval(fetch(cid="Qm34", providers=[multiaddress(...)]))
+	=> eval( ... IPLD contents of Qm34 ... )
+	=> [
+          provide(cid="Qm12", fetch=fetch(cid="Qm12", providers=[multiaddr("/ip4/1.2.3.4:55")])),
+          provide(cid="Qm34", fetch=fetch(cid="Qm34", providers=[multiaddr("/ip4/1.2.3.4:55")])),
+		find(cid="Qm34"),
+    	]
+	=> [
+		provided_ok(),
+		provided_ok(),
+		fetch(cid="Qm34", providers=[multiaddr("/ip4/1.2.3.4:55")]),
+	]
