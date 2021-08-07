@@ -33,7 +33,7 @@ func (p Providers) Express() syntax.Node {
 	for i, u := range p {
 		n[i] = u.Express()
 	}
-	return syntax.List{n}
+	return syntax.List{Elements: n}
 }
 
 // ParseProviders parses a list of providers, ignoring unrecognizable provider patterns.

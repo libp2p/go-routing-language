@@ -8,6 +8,12 @@ import (
 	"github.com/libp2p/go-routing-language/syntax"
 )
 
+// Fetch represents a FETCH pattern.
+type Fetch interface {
+	Pattern
+	IsFetch()
+}
+
 // FetchCid is the Go representation of the routing language pattern
 // 	fetch(cid=link(CID:STRING), providers=[PROVIDER])
 type FetchCid struct {
@@ -15,12 +21,14 @@ type FetchCid struct {
 	Providers Providers
 }
 
+func (f *FetchCid) IsFetch() {}
+
 func (f *FetchCid) Express() syntax.Node {
 	return syntax.Predicate{
 		Tag: "fetch",
 		Named: syntax.Pairs{
-			{syntax.String{"cid"}, (&Link{Cid: f.Cid}).Express()},
-			{syntax.String{"providers"}, f.Providers.Express()},
+			{Key: syntax.String{Value: "cid"}, Value: (&Link{Cid: f.Cid}).Express()},
+			{Key: syntax.String{Value: "providers"}, Value: f.Providers.Express()},
 		},
 	}
 }

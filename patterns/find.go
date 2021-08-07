@@ -69,7 +69,7 @@ func (f *FindPath) Express() syntax.Node {
 			syntax.Predicate{
 				Tag: "path",
 				Positional: syntax.Nodes{
-					syntax.String{f.Path},
+					syntax.String{Value: f.Path},
 				},
 			},
 		},

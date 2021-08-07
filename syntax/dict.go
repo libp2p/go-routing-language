@@ -40,6 +40,14 @@ func (ps Pairs) IndexOf(key Node) int {
 	return -1
 }
 
+func (ps Pairs) ValueOf(key Node) Node {
+	i := ps.IndexOf(key)
+	if i < 0 {
+		return nil
+	}
+	return ps[i].Value
+}
+
 func (ps Pairs) ToIPLD() (ipld.Node, error) {
 	// Build pairs
 	lbuild := xipld.Type.Pairs_IPLD.NewBuilder()
