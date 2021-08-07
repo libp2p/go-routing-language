@@ -13,6 +13,7 @@ type Provider interface {
 	IsProvider()
 }
 
+// ParseProvider parses a provider pattern from a syntactic representation.
 func ParseProvider(ctx *parse.ParseCtx, src syntax.Node) (Provider, error) {
 	multi, err := ParseMultiaddr(ctx, src)
 	if err == nil {
@@ -28,6 +29,7 @@ func ParseProvider(ctx *parse.ParseCtx, src syntax.Node) (Provider, error) {
 // Providers is a list of providers.
 type Providers []Provider
 
+// Express returns the syntactic representation of the list of providers.
 func (p Providers) Express() syntax.Node {
 	n := make(syntax.Nodes, len(p))
 	for i, u := range p {

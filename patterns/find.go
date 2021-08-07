@@ -13,6 +13,7 @@ type FindCid struct {
 	Cid cid.Cid
 }
 
+// Express returns the syntactic representation of the find cid pattern.
 func (f *FindCid) Express() syntax.Node {
 	return syntax.Predicate{
 		Tag: "find",
@@ -22,12 +23,15 @@ func (f *FindCid) Express() syntax.Node {
 	}
 }
 
+// FindCidParser is a parser for `find(link(CID:STRING))` patterns.
 type FindCidParser struct{}
 
+// Parse parses a fetch cid pattern.
 func (FindCidParser) Parse(ctx *parse.ParseCtx, src syntax.Node) (interface{}, error) {
 	return ParseFindCid(ctx, src)
 }
 
+// MatchAllFindCid parses all find cid patterns found in src.
 func MatchAllFindCid(ctx *parse.ParseCtx, match parse.Parser, src syntax.Node) []*FindCid {
 	m := FindCidParser{}
 	found := parse.MatchAll(ctx, m, src)
@@ -62,6 +66,7 @@ type FindPath struct {
 	Path string
 }
 
+// Express returns the syntactic representation of the find path pattern.
 func (f *FindPath) Express() syntax.Node {
 	return syntax.Predicate{
 		Tag: "find",

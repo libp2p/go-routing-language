@@ -8,14 +8,14 @@ import (
 	"github.com/libp2p/go-routing-language/syntax"
 )
 
-// FindCid is the Go representation of the `provide(cid=CID:CID, fetch=FETCH:FETCH)`
+// FindCid is the Go representation of the `provide(cid=link(CID:STRING), fetch=FETCH:FETCH)`
 // pattern from the Routing Language Spec.
 type ProvideCid struct {
 	Cid   cid.Cid
 	Fetch Fetch
 }
 
-// Express returns the syntactic representation of the provide expression.
+// Express returns the syntactic representation of the provide pattern.
 func (p *ProvideCid) Express() syntax.Node {
 	return syntax.Predicate{
 		Tag: "provide",
@@ -26,13 +26,15 @@ func (p *ProvideCid) Express() syntax.Node {
 	}
 }
 
+// ProvideCidParser is a parser for `provide(cid=link(CID:STRING), fetch=FETCH:FETCH)` patterns.
 type ProvideCidParser struct{}
 
+// Parse parses a provide pattern.
 func (ProvideCidParser) Parse(ctx *parse.ParseCtx, src syntax.Node) (interface{}, error) {
 	return ParseProvideCid(ctx, src)
 }
 
-// ParseProvideCid parses formulas of the form `provide(cid=CID:CID, fetch=FETCH:FETCH)`.
+// ParseProvideCid parses formulas of the form `provide(cid=link(CID:STRING), fetch=FETCH:FETCH)`.
 func ParseProvideCid(ctx *parse.ParseCtx, src syntax.Node) (*ProvideCid, error) {
 	p0, ok := src.(syntax.Predicate)
 	if !ok {

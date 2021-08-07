@@ -21,8 +21,10 @@ type FetchCid struct {
 	Providers Providers
 }
 
+// IsFetch informs the Go type system that FetchCid is a fetch pattern.
 func (f *FetchCid) IsFetch() {}
 
+// Express returns the syntactic representation of the fetch cid pattern.
 func (f *FetchCid) Express() syntax.Node {
 	return syntax.Predicate{
 		Tag: "fetch",
@@ -33,12 +35,15 @@ func (f *FetchCid) Express() syntax.Node {
 	}
 }
 
+// FetchCidParser is a parser for fetch cid patterns.
 type FetchCidParser struct{}
 
+// Parse parses a fetch cid pattern.
 func (FetchCidParser) Parse(ctx *parse.ParseCtx, src syntax.Node) (interface{}, error) {
 	return ParseFetchCid(ctx, src)
 }
 
+// MatchAllFetchCid parses all fetch cid patterns found in src.
 func MatchAllFetchCid(ctx *parse.ParseCtx, match parse.Parser, src syntax.Node) []*FetchCid {
 	m := FetchCidParser{}
 	found := parse.MatchAll(ctx, m, src)
