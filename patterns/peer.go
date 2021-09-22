@@ -19,7 +19,7 @@ func (p *Peer) Express() syntax.Node {
 	return syntax.Predicate{
 		Tag: "peer",
 		Positional: syntax.Nodes{
-			syntax.String{p.ID.String()},
+			syntax.String{Value: p.ID.String()},
 		},
 	}
 }

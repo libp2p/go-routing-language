@@ -85,6 +85,9 @@ func (n Int) ToIPLD() (ipld.Node, error) {
 func (n Float) toNode_IPLD() (ipld.Node, error) {
 	t := xipld.Type.Node_IPLD.NewBuilder()
 	ma, err := t.BeginMap(-1)
+	if err != nil {
+		return nil, err
+	}
 	asm, err := ma.AssembleEntry("Float_IPLD")
 	if err != nil {
 		return nil, err
@@ -104,6 +107,9 @@ func (n Float) toNode_IPLD() (ipld.Node, error) {
 func (n Int) toNode_IPLD() (ipld.Node, error) {
 	t := xipld.Type.Node_IPLD.NewBuilder()
 	ma, err := t.BeginMap(-1)
+	if err != nil {
+		return nil, err
+	}
 	asm, err := ma.AssembleEntry("Int_IPLD")
 	if err != nil {
 		return nil, err

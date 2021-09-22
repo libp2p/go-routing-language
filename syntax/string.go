@@ -36,6 +36,9 @@ func (s String) ToIPLD() (ipld.Node, error) {
 func (s String) toNode_IPLD() (ipld.Node, error) {
 	t := xipld.Type.Node_IPLD.NewBuilder()
 	ma, err := t.BeginMap(-1)
+	if err != nil {
+		return nil, err
+	}
 	asm, err := ma.AssembleEntry("String_IPLD")
 	if err != nil {
 		return nil, err

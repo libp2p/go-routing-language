@@ -78,7 +78,7 @@ func FromIPLD(n ipld.Node) (Node, error) {
 		return nil, fmt.Errorf("Node_IPLD has no valid type inside")
 	}
 
-	return nil, fmt.Errorf("IPLD type for xr.Node not found. Can't convert.")
+	return nil, fmt.Errorf("IPLD type for xr.Node not found. Can't convert")
 }
 
 // Creates a List in XR from List_IPLD

@@ -35,6 +35,9 @@ func (b Bool) ToIPLD() (ipld.Node, error) {
 func (b Bool) toNode_IPLD() (ipld.Node, error) {
 	t := xipld.Type.Node_IPLD.NewBuilder()
 	ma, err := t.BeginMap(-1)
+	if err != nil {
+		return nil, err
+	}
 	asm, err := ma.AssembleEntry("Bool_IPLD")
 	if err != nil {
 		return nil, err
