@@ -17,7 +17,7 @@ func (l *Link) Express() syntax.Node {
 	return syntax.Predicate{
 		Tag: "link",
 		Positional: syntax.Nodes{
-			syntax.String{l.Cid.String()},
+			syntax.String{Value: l.Cid.String()},
 		},
 	}
 }

@@ -125,6 +125,9 @@ func (p Predicate) ToIPLD() (ipld.Node, error) {
 func (p Predicate) toNode_IPLD() (ipld.Node, error) {
 	t := xipld.Type.Node_IPLD.NewBuilder()
 	ma, err := t.BeginMap(-1)
+	if err != nil {
+		return nil, err
+	}
 	asm, err := ma.AssembleEntry("Predicate_IPLD")
 	if err != nil {
 		return nil, err

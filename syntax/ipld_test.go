@@ -183,6 +183,9 @@ func TestCBORMarshalCBOR(t *testing.T) {
 		t.Fatal(err)
 	}
 	no, err := FromIPLD(noipld.Build())
+	if err != nil {
+		t.Fatal(err)
+	}
 	if !IsEqual(n, no) {
 		t.Fatal("Marshalled Bytes nodes not equal")
 	}

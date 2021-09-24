@@ -20,7 +20,7 @@ func (b Bytes) WritePretty(w io.Writer) error {
 }
 
 func IsEqualBytes(x, y Bytes) bool {
-	return bytes.Compare(x.Bytes, y.Bytes) == 0
+	return bytes.Equal(x.Bytes, y.Bytes)
 }
 
 // ToIPLD converts xr.Node into its corresponding IPLD Node type
@@ -32,6 +32,9 @@ func (b Bytes) ToIPLD() (ipld.Node, error) {
 func (b Bytes) toNode_IPLD() (ipld.Node, error) {
 	t := xipld.Type.Node_IPLD.NewBuilder()
 	ma, err := t.BeginMap(-1)
+	if err != nil {
+		return nil, err
+	}
 	asm, err := ma.AssembleEntry("Bytes_IPLD")
 	if err != nil {
 		return nil, err

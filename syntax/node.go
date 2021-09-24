@@ -43,7 +43,7 @@ func (ns Nodes) ToIPLD() (ipld.Node, error) {
 		}
 		// la.AssembleValue is Node_IPLD Assembler. Need to assemble a node
 		if err := la.AssembleValue().AssignNode(n); err != nil {
-			return nil, fmt.Errorf("Error assembling value: %s", err)
+			return nil, fmt.Errorf("error assembling value: %s", err)
 		}
 	}
 	// Finish list building

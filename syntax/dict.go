@@ -243,6 +243,9 @@ func IsEqualDict(x, y Dict) bool {
 func (d Dict) toNode_IPLD() (ipld.Node, error) {
 	t := xipld.Type.Node_IPLD.NewBuilder()
 	ma, err := t.BeginMap(-1)
+	if err != nil {
+		return nil, err
+	}
 	asm, err := ma.AssembleEntry("Dict_IPLD")
 	if err != nil {
 		return nil, err

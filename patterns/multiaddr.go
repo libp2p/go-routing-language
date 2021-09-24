@@ -19,7 +19,7 @@ func (p *Multiaddr) Express() syntax.Node {
 	return syntax.Predicate{
 		Tag: "multiaddr",
 		Positional: syntax.Nodes{
-			syntax.String{p.Multiaddr.String()},
+			syntax.String{Value: p.Multiaddr.String()},
 		},
 	}
 }
