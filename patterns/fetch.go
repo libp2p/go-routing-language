@@ -15,7 +15,8 @@ type Fetch interface {
 }
 
 // FetchCid is the Go representation of the routing language pattern
-// 	fetch(cid=link(CID:STRING), providers=[PROVIDER])
+//
+//	fetch(cid=link(CID:STRING), providers=[PROVIDER])
 type FetchCid struct {
 	Cid       cid.Cid
 	Providers Providers
