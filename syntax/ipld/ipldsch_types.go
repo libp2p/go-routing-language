@@ -11,12 +11,11 @@ var _ datamodel.Node = nil // suppress errors when this dependency is not refere
 // One of its major uses is to start the construction of a value.
 // You can use it like this:
 //
-// 		ipld.Type.YourTypeName.NewBuilder().BeginMap() //...
+//	ipld.Type.YourTypeName.NewBuilder().BeginMap() //...
 //
 // and:
 //
-// 		ipld.Type.OtherTypeName.NewBuilder().AssignString("x") // ...
-//
+//	ipld.Type.OtherTypeName.NewBuilder().AssignString("x") // ...
 var Type typeSlab
 
 type typeSlab struct {
