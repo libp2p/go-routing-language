@@ -1,6 +1,6 @@
 module github.com/libp2p/go-routing-language
 
-go 1.23
+go 1.24
 
 require (
 	github.com/ipfs/go-cid v0.4.1
